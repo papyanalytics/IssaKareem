@@ -437,7 +437,7 @@ export const websiteProjects: Project[] = [
     title: 'Treats By Rich',
     category: 'Website Design & Development',
     type: 'Website project',
-    summary: 'A previously built website project for Treats By Rich.',
+    summary: 'A website project for Treats By Rich, presenting the business and its products.',
     problem: 'The website project provides an online presence for the Treats By Rich business.',
     objective: 'Present Treats By Rich through a business website.',
     contribution: 'Previously built this website project for the Treats By Rich business.',
@@ -453,6 +453,8 @@ export const websiteProjects: Project[] = [
     imageWidth: 760,
     imageHeight: 560,
     imageFit: 'contain',
+    externalUrl: 'https://treatsbyrich.com/',
+    externalLinkLabel: 'Visit Website',
   },
 ];
 
