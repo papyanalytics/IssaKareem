@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Portfolio: Astro dev server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false
+			},
+			"isBackground": true,
+			"problemMatcher": [],
+			"runOptions": {
+				"runOn": "folderOpen",
+				"instanceLimit": 1,
+				"instancePolicy": "silent",
+				"reevaluateOnRerun": false
+			}
+		}
+	]
+}
