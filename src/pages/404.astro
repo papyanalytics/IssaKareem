@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/paths';
+---
+
+<BaseLayout title="Page not found | Issa Kareem Oyaifo" description="This page could not be found.">
+  <main id="main-content" class="not-found">
+    <div><p class="eyebrow">404 / Page not found</p><h1>Nothing here.</h1><p>The page may have moved. Head back to the portfolio.</p><a class="button button--gold" href={withBase('/')}>Return home <span aria-hidden="true">&#8594;</span></a></div>
+  </main>
+</BaseLayout>

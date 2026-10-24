@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#191a17"/>
+  <path d="M830 0v630M0 515h1200" stroke="#4a493f"/>
+  <rect x="78" y="77" width="52" height="52" fill="none" stroke="#c7a66b"/>
+  <text x="104" y="110" fill="#f3f1eb" font-family="Arial,sans-serif" font-size="17" font-weight="700" text-anchor="middle">IO</text>
+  <text x="78" y="195" fill="#c7a66b" font-family="Arial,sans-serif" font-size="17" letter-spacing="4">TECHNOLOGY &amp; DATA ANALYST</text>
+  <text x="78" y="300" fill="#f3f1eb" font-family="Arial,sans-serif" font-size="65" font-weight="500">Issa Kareem Oyaifo</text>
+  <text x="78" y="390" fill="#f3f1eb" font-family="Arial,sans-serif" font-size="38">Turning business problems into</text>
+  <text x="78" y="444" fill="#d5b77d" font-family="Arial,sans-serif" font-size="38">data-driven solutions.</text>
+  <text x="78" y="570" fill="#aaa9a1" font-family="Arial,sans-serif" font-size="16" letter-spacing="2">DATA  /  BUSINESS  /  TECHNOLOGY</text>
+</svg>

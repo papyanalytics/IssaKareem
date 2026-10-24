@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { analyticsProjects, projects, websiteProjects } from '../data/projects';
+import { withBase } from '../utils/paths';
+
+const capabilities = [
+  { title: 'Data analytics and business intelligence', description: 'I use these tools to analyse business data, build visual reports and communicate performance.', items: ['Power BI', 'Excel', 'SQL'] },
+  { title: 'Data preparation and analysis', description: 'I prepare and explore data, then use notebooks and query tools to investigate questions.', items: ['Power Query', 'Python', 'Jupyter Notebook'] },
+  { title: 'Website design and development', description: 'I use an editor and AI-assisted coding to research, build and refine practical website experiences.', items: ['VS Code', 'AI-assisted coding'] },
+  { title: 'AI tools', description: 'I use AI tools selectively for research, ideation, coding support and problem-solving; use varies by project.', items: ['ChatGPT', 'Claude', 'Gemini', 'Kimi'] },
+];
+
+const process = [
+  ['01', 'Understand', 'Start with the business context and the decision at hand.'],
+  ['02', 'Investigate', 'Check the available information, quality and constraints.'],
+  ['03', 'Analyse', 'Look for patterns, performance gaps and useful signals.'],
+  ['04', 'Build', 'Shape findings into a dashboard, report or digital experience.'],
+  ['05', 'Communicate', 'Make the meaning and next considerations clear.'],
+  ['06', 'Improve', 'Refine the work as the problem and evidence evolve.'],
+];
+
+const experience = [
+  {
+    company: 'Egatee (NIG)',
+    role: 'CSR Operations & Business Data Analyst',
+    responsibilities: [
+      'Supported backend business applications and operational systems used by CSR teams and field representatives, ensuring smooth day-to-day reporting operations.',
+      'Maintained data accuracy and consistency across operational databases and reporting systems, reducing discrepancies in downstream reports.',
+      'Performed Excel-based data analysis and reporting to support management decision-making.',
+    ],
+  },
+  {
+    company: 'Zamda Health',
+    role: 'Technical Support & Inventory Data Assistant',
+    responsibilities: [
+      'Provided technical support for pharmacy management software and POS systems, helping reduce operational downtime.',
+      'Assisted with software installation, configuration, and onboarding of pharmacies onto the platform.',
+      'Supported inventory synchronization and maintained accurate inventory and transaction records.',
+      'Helped troubleshoot software and operational issues to minimize disruptions to pharmacy workflows.',
+    ],
+  },
+];
+
+const certifications = [
+  'Foundations of Data Analytics - Enterprise DNA',
+  'Introduction to Python - DataCamp',
+  'Intermediate Python - DataCamp',
+  'Introduction to SQL - DataCamp',
+  'Intermediate SQL - DataCamp',
+  'Python Beyond Excel - Enterprise DNA',
+  'Advanced Python for Power BI - Enterprise DNA',
+];
+
+const year = new Date().getFullYear();
+---
+
+<BaseLayout>
+  <main id="main-content">
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <div class="hero__inner">
+        <div class="hero__copy">
+          <p class="hero__name">Issa Kareem Oyaifo</p>
+          <p class="eyebrow">Technology &amp; Data Analyst</p>
+          <h1 id="hero-title">Turning business problems into <span>data-driven solutions.</span></h1>
+          <p class="hero__intro">I'm Issa Kareem Oyaifo, a Technology &amp; Data Analyst focused on transforming data into insights, building useful digital experiences and helping organisations make smarter decisions.</p>
+          <div class="hero__actions">
+            <a class="button button--gold" href="#work">Explore my work <span aria-hidden="true">&#8594;</span></a>
+            <a class="button button--outline" href={withBase('/issa-kareem-oyaifo-cv.pdf')} download>Download CV <span aria-hidden="true">&#8595;</span></a>
+          </div>
+          <p class="hero__location">Lagos, Nigeria <span aria-hidden="true">&bull;</span> Data <span aria-hidden="true">&bull;</span> Business <span aria-hidden="true">&bull;</span> Technology</p>
+        </div>
+        <figure class="hero__portrait">
+          <img src={withBase('/images/issa-kareem-oyaifo.jpeg')} alt="Portrait of Issa Kareem Oyaifo" width="902" height="1280" fetchpriority="high" />
+          <figcaption><span>Issa Kareem Oyaifo</span><span>Technology &amp; Data Analyst</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section--light" aria-labelledby="what-i-bring">
+      <div class="container">
+        <SectionHeading eyebrow="The intersection" title="What I bring" description="A practical combination of analysis, business understanding and technology, grounded in real work and documented projects." />
+        <div class="bring-grid">
+          <article class="bring-item"><span class="bring-item__number">01 / DATA</span><h3>DATA</h3><p>I analyse, clean, model and visualise data to uncover patterns, performance gaps and opportunities.</p></article>
+          <article class="bring-item"><span class="bring-item__number">02 / BUSINESS</span><h3>BUSINESS</h3><p>I connect analysis to questions about revenue, profitability, customers, operations, risk and performance.</p></article>
+          <article class="bring-item"><span class="bring-item__number">03 / TECHNOLOGY</span><h3>TECHNOLOGY</h3><p>I use business technology and digital tools to turn ideas and insights into practical solutions.</p></article>
+        </div>
+        <p class="bring-quote">I don't start with the tool.<br /><span>I start with the problem.</span></p>
+      </div>
+    </section>
+
+    <section id="capabilities" class="section section--dark" aria-labelledby="capabilities">
+      <div class="container">
+        <SectionHeading eyebrow="How I can contribute" title="Capabilities" description="Tools and skills organised around the work they support, not a wall of logos." light />
+        <div class="capability-grid">
+          {capabilities.map((group, index) => (
+            <article class="capability-card">
+              <span class="capability-card__index">0{index + 1} / TOOLS IN PRACTICE</span>
+              <h3>{group.title}</h3>
+              <p class="capability-card__description">{group.description}</p>
+              <ul>{group.items.map((item) => <li>{item}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="section section--paper" aria-labelledby="selected-work">
+      <div class="container">
+        <SectionHeading eyebrow="Evidence in practice" title="Selected work" description="Explore analytics projects and a separate collection of website design and development work." />
+        <div class="work-toolbar">
+          <p id="work-result-count" aria-live="polite">Showing all {projects.length} projects</p>
+          <div class="work-filters" role="group" aria-label="Filter projects by category">
+            <button class="work-filter" type="button" data-filter="all" aria-pressed="true">All work</button>
+            <button class="work-filter" type="button" data-filter="Analytics" aria-pressed="false">Analytics</button>
+            <button class="work-filter" type="button" data-filter="Website Design & Development" aria-pressed="false">Website Design &amp; Development</button>
+          </div>
+        </div>
+        <div class="work-category" data-work-category="Analytics">
+          <h3 class="work-category__title">Analytics</h3>
+          <div class="project-grid">
+            {analyticsProjects.map((project) => <ProjectCard project={project} />)}
+          </div>
+        </div>
+        <div class="work-category" data-work-category="Website Design & Development">
+          <h3 class="work-category__title">Website Design &amp; Development</h3>
+          <div class="project-grid">
+            {websiteProjects.map((project) => <ProjectCard project={project} />)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--dark" aria-labelledby="how-i-approach-problems">
+      <div class="container">
+        <SectionHeading eyebrow="A considered workflow" title="How I approach problems" description="Start with the need. Use evidence. Make the output useful to the people who will act on it." light />
+        <div class="process-grid">
+          {process.map(([number, title, description]) => (
+            <article class="process-step"><span>{number}</span><h3>{title}</h3><p>{description}</p></article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section section--light" aria-labelledby="about-title">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-aside"><p class="eyebrow">A little context</p><h2 id="about-title">Data-minded.<br />Business-aware.<br />Technology-curious.</h2></div>
+          <div class="about-copy">
+            <p>I'm Issa Kareem Oyaifo, a Technology &amp; Data Analyst based in Lagos, Nigeria, with hands-on experience supporting business applications, operational systems, data quality, reporting and decision-making.</p>
+            <p>My work sits at the intersection of data, business and technology. I enjoy taking a messy business problem, understanding what is actually happening, and turning that understanding into something useful - whether that's a Power BI dashboard, an analytical model, a website or a digital product.</p>
+            <p>My background in analytics has taught me how to think with data. Building digital solutions has taught me to think about users and businesses. I'm continuing to combine both to become someone who can contribute beyond a single function.</p>
+          </div>
+        </div>
+        <div class="about-tail">
+          <div>
+            <h3>Education</h3>
+            <ul>
+              <li class="education-item"><strong>B.Sc. Biochemistry</strong><span>Federal University Otuoke, Bayelsa State</span></li>
+              <li class="education-item"><strong>National Diploma</strong><span>Auchi Polytechnic</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Certifications &amp; technical training</h3>
+            <ul class="cert-list">{certifications.map((certification) => <li>{certification}</li>)}</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="section section--dark" aria-labelledby="work-grounded-in-operations">
+      <div class="container">
+        <SectionHeading eyebrow="Professional experience" title="Work grounded in operations" description="Experience supporting business applications, data quality, reporting and day-to-day operational workflows." light />
+        <div class="experience-list">
+          {experience.map((item) => (
+            <article class="experience-item">
+              <div><div class="experience-item__company">{item.company}</div><div class="experience-item__role">{item.role}</div></div>
+              <ul>{item.responsibilities.map((responsibility) => <li>{responsibility}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact" aria-labelledby="contact-title">
+      <div class="container contact__inner">
+        <div>
+          <p class="eyebrow">The next question</p>
+          <h2 id="contact-title">Have a problem worth solving?</h2>
+          <p class="contact__copy">Whether you need better visibility into your data, a business dashboard, or a practical digital solution, I'd love to hear what you're working on.</p>
+        </div>
+        <div class="contact__details">
+          <p><strong>Location</strong>Lagos, Nigeria</p>
+          <a class="button button--gold" href={withBase('/issa-kareem-oyaifo-cv.pdf')} download>Download CV <span aria-hidden="true">&#8595;</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><p>&copy; {year} Issa Kareem Oyaifo</p><a href="#home">Back to top <span aria-hidden="true">&#8593;</span></a></footer>
+</BaseLayout>
+
+<script>
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>('.work-filter');
+  const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
+  const categorySections = document.querySelectorAll<HTMLElement>('[data-work-category]');
+  const resultCount = document.querySelector<HTMLElement>('#work-result-count');
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter ?? 'all';
+      let visibleCount = 0;
+
+      filterButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      categorySections.forEach((section) => {
+        const matches = filter === 'all' || section.dataset.workCategory === filter;
+        section.hidden = !matches;
+      });
+      projectCards.forEach((card) => {
+        const matches = filter === 'all' || card.dataset.category === filter;
+        card.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+
+      if (resultCount) {
+        resultCount.textContent = filter === 'all'
+          ? `Showing all ${visibleCount} projects`
+          : `Showing ${visibleCount} ${filter.toLowerCase()} projects`;
+      }
+    });
+  });
+</script>
