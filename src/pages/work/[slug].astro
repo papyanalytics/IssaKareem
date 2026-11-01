@@ -21,7 +21,7 @@ const previewTitle = project.slug === 'ruchy-qr-business-card'
 ---
 
 <BaseLayout
-  title={`${project.title} | Issa Kareem Oyaifo`}
+  title={`${project.slug === 'supplier-quality-performance' ? 'Supplier Quality & Performance Dashboard' : project.title} | Issa Kareem Oyaifo`}
   description={project.summary}
   canonicalPath={`/work/${project.slug}/`}
 >
@@ -30,14 +30,101 @@ const previewTitle = project.slug === 'ruchy-qr-business-card'
       <div class="case-hero__inner">
         <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={withBase('/#work')}>Selected work</a><span aria-hidden="true">/</span><span>{project.category}</span></nav>
         <p class="eyebrow">{project.type}</p>
-        <h1>{project.title}</h1>
-        <p class="case-hero__summary">{project.summary}</p>
+        <h1>{project.slug === 'supplier-quality-performance' ? 'Supplier Quality & Performance Dashboard' : project.title}</h1>
+        <p class="case-hero__summary">{project.slug === 'supplier-quality-performance' ? 'Power BI | Power Query | DAX | Data Modelling' : project.summary}</p>
         <div class="case-hero__meta"><span>{project.category}</span>{project.tools.length > 0 && <span>{project.tools.join(' / ')}</span>}</div>
       </div>
     </section>
     <div class="container case-body">
       <article class="case-content">
-        {project.slug === 'gangreen' ? (
+        {project.slug === 'supplier-quality-performance' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#overview">Project Overview</a>
+                <a href="#objective">Objective</a>
+                <a href="#contribution">My Contribution</a>
+                <a href="#tools-process">Tools &amp; Process</a>
+                <a href="#dashboard-analysis">Dashboard Analysis</a>
+                <a href="#key-observations">Key Observations</a>
+                <a href="#recommendations">Recommendations</a>
+                <a href="#what-i-learned">What I Learned</a>
+              </div>
+            </nav>
+
+            <section id="overview">
+              <h2>Project Overview</h2>
+              <p>A supplier quality analysis project developed in Power BI to explore product defects, supplier performance, plant-level quality issues and production downtime. The dashboard provides an interactive view of quality-related metrics to support supplier monitoring and operational decision-making.</p>
+              <figure class="case-image">
+                <img
+                  src={withBase(project.image ?? '/images/projects/supplier-quality-performance.webp')}
+                  alt={project.imageAlt ?? 'Supplier Quality and Performance dashboard preview'}
+                  width={project.imageWidth ?? 1200}
+                  height={project.imageHeight ?? 650}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption ?? 'Supplier Quality and Performance Dashboard overview.'}</figcaption>
+              </figure>
+            </section>
+
+            <section id="objective">
+              <h2>Objective</h2>
+              <p>To examine defect patterns and production downtime across vendors, plants, material types and defect categories, making it easier to explore where quality issues occur and their potential operational impact.</p>
+            </section>
+
+            <section id="contribution">
+              <h2>My Contribution</h2>
+              <p>This was a tutorial-based Power BI project completed as part of a four-part Power BI Project Marathon. My work involved preparing the data, creating dimension tables, building the analytical data structure, developing DAX measures and designing the interactive dashboard.</p>
+            </section>
+
+            <section id="tools-process">
+              <h2>Tools &amp; Process</h2>
+              <ol>
+                <li><strong>Data Preparation:</strong> Used Power Query to import the Supplier Quality worksheet, promote column headers, assign appropriate data types and remove duplicate records.</li>
+                <li><strong>Data Modelling:</strong> Created six lookup tables for Vendor, Plant, Category, Material Type, Defect Type and Defect. Generated unique identifiers and merged these tables into the Supplier Fact query using inner joins.</li>
+                <li><strong>DAX Measures:</strong> Developed measures to calculate total defect quantity, downtime hours and downtime cost using an hourly cost parameter.</li>
+                <li><strong>Visualisation:</strong> Built interactive report pages to explore supplier quality and operational performance from different perspectives.</li>
+              </ol>
+            </section>
+
+            <section id="dashboard-analysis">
+              <h2>Dashboard Analysis</h2>
+              <ul>
+                <li><strong>Overview:</strong> Presents the main quality and downtime indicators.</li>
+                <li><strong>Vendor:</strong> Explores defect and quality performance across suppliers.</li>
+                <li><strong>Plant:</strong> Examines quality issues across production locations.</li>
+                <li><strong>Material:</strong> Provides a breakdown of defects by material-related categories.</li>
+                <li><strong>Impact:</strong> Examines the distribution of recorded quality impacts.</li>
+              </ul>
+            </section>
+
+            <section id="key-observations">
+              <h2>Key Observations</h2>
+              <p>The dashboard displays a total defect quantity of approximately <strong>2.60 billion</strong>, downtime hours of approximately <strong>215.81K</strong>, and an estimated downtime cost of <strong>$2.16 million</strong>, based on the configured hourly cost parameter of $10.</p>
+              <p>The impact classification visual shows:</p>
+              <ul>
+                <li>Impact: 31.71%</li>
+                <li>No Impact: 39.86%</li>
+                <li>Rejected: 28.43%</li>
+              </ul>
+            </section>
+
+            <section id="recommendations">
+              <h2>Recommendations</h2>
+              <ul>
+                <li>Prioritise further investigation of suppliers and plants with high recorded defect levels.</li>
+                <li>Review recurring defect categories to identify opportunities for quality improvement.</li>
+                <li>Monitor downtime and associated costs to support operational planning.</li>
+              </ul>
+            </section>
+
+            <section id="what-i-learned">
+              <h2>What I Learned</h2>
+              <p>This project strengthened my practical experience in Power Query transformations, dimensional data modelling, DAX calculations and developing interactive Power BI reports.</p>
+            </section>
+          </>
+        ) : project.slug === 'gangreen' ? (
           <>
             <section>
               <h2>Project overview</h2>
@@ -190,7 +277,7 @@ const previewTitle = project.slug === 'ruchy-qr-business-card'
         <dl>
           <div><dt>Category</dt><dd>{project.category}</dd></div>
           <div><dt>Classification</dt><dd>{project.type}</dd></div>
-          <div><dt>My contribution</dt><dd>{project.contribution}</dd></div>
+          {project.slug !== 'supplier-quality-performance' && <div><dt>My contribution</dt><dd>{project.contribution}</dd></div>}
           {project.tools.length > 0 && <div><dt>Tools</dt><dd>{project.tools.join(' / ')}</dd></div>}
           {project.externalUrl && <div><dt>Public project</dt><dd><a href={project.externalUrl} target="_blank" rel="noopener noreferrer">{project.externalLinkLabel} &#8599;</a></dd></div>}
         </dl>
