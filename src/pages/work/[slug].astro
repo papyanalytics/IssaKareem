@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import FitnessCaseStudy from '../../components/FitnessCaseStudy.astro';
 import { projects } from '../../data/projects';
 import { withBase } from '../../utils/paths';
 
@@ -29,15 +30,1047 @@ const previewTitle = project.slug === 'ruchy-qr-business-card'
     <section class="case-hero">
       <div class="case-hero__inner">
         <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={withBase('/#work')}>Selected work</a><span aria-hidden="true">/</span><span>{project.category}</span></nav>
-        <p class="eyebrow">{project.type}</p>
+        <p class="eyebrow">{project.slug === 'saas-financial-analysis' ? 'FP20 Analytics Challenge 25' : project.type}</p>
         <h1>{project.slug === 'supplier-quality-performance' ? 'Supplier Quality & Performance Dashboard' : project.title}</h1>
-        <p class="case-hero__summary">{project.slug === 'supplier-quality-performance' ? 'Power BI | Power Query | DAX | Data Modelling' : project.summary}</p>
+        <p class="case-hero__summary">{project.slug === 'cafe-sales-analysis' ? 'Real-World Analytics Engagement | Python | Jupyter Notebook | Power BI' : project.slug === 'x24-music-intelligence' ? 'Independent Research Project | Power BI | Music Analytics | Data Research' : project.slug === 'hr-analytics' ? 'ZoomCharts HR Analytics Challenge | Power BI | DAX | ZoomCharts' : project.slug === 'pharmacy-sales-profitability' ? 'Power BI | DAX | ZoomCharts | Sales & Financial Analysis' : project.slug === 'credit-risk-analysis' ? 'Onyx Data Challenge | Power BI | Power Query | DAX | ZoomCharts' : project.slug === 'stock-exchange-analysis' ? 'Practical Financial Data Analysis | Python | Jupyter Notebook | yfinance' : project.slug === 'clinic-analysis' ? 'EDNA Scholarship Learning Project | Python | Jupyter Notebook | Power BI' : project.slug === 'fitness-centre-analytics' ? 'Onyx Data Challenge | Power BI | Power Query | Python | Jupyter Notebook | DAX | ZoomCharts' : project.slug === 'supplier-quality-performance' ? 'Power BI | Power Query | DAX | Data Modelling' : project.slug === 'saas-financial-analysis' ? 'Power BI | DAX | ZoomCharts' : project.summary}</p>
         <div class="case-hero__meta"><span>{project.category}</span>{project.tools.length > 0 && <span>{project.tools.join(' / ')}</span>}</div>
       </div>
     </section>
     <div class="container case-body">
       <article class="case-content">
-        {project.slug === 'supplier-quality-performance' ? (
+        {project.slug === 'stock-exchange-analysis' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#stock-overview">Project Overview</a>
+                <a href="#stock-context">Project Context &amp; Objectives</a>
+                <a href="#stock-tools">Tools &amp; Technologies</a>
+                <a href="#stock-acquisition">Data Sources &amp; Acquisition</a>
+                <a href="#stock-preparation">Data Inspection &amp; Preparation</a>
+                <a href="#stock-workflow">Technical Workflow &amp; Code</a>
+                <a href="#stock-methodology">Moving-Average Methodology</a>
+                <a href="#stock-visual-analysis">Visual Analysis &amp; Interpretation</a>
+                <a href="#stock-takeaways">Key Takeaways</a>
+                <a href="#stock-limitations">Limitations &amp; Considerations</a>
+                <a href="#stock-skills">Skills Demonstrated</a>
+              </div>
+            </nav>
+
+            <section id="stock-overview">
+              <h2>1. Project Overview</h2>
+              <p>Historical market data helps analysts describe how an asset's price has changed, compare movement over different time horizons, and communicate the shape of a time series. This practical Python project uses Apple's historical share prices as its primary series and rolling averages as descriptive references for short-, medium- and longer-window price behaviour.</p>
+              <p>The Jupyter Notebook requests market data, inspects the downloaded structure, prepares a single Apple price series, calculates three rolling means and visualises the result. It explores historical movements; it does not establish why prices moved, evaluate investment returns, predict future prices or recommend a trade.</p>
+              <figure class="case-image">
+                <img
+                  class:list={project.imageFit === 'contain' ? 'case-image__dashboard' : undefined}
+                  src={withBase(project.image ?? '/images/projects/stock-exchange-analysis.webp')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 950}
+                  height={project.imageHeight ?? 550}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+              <p class="stock-notebook-link"><a class="text-link" href={withBase('/downloads/Stock%20Exchange.ipynb')} download>Download the Jupyter Notebook <span aria-hidden="true">&#8595;</span></a></p>
+            </section>
+
+            <section id="stock-context">
+              <h2>2. Project Context &amp; Objectives</h2>
+              <p>Historical share prices are time-series data whose short-, medium- and longer-window movements can be difficult to compare in a single view. A moving average smooths a rolling set of past observations: shorter windows follow recent changes more closely, while longer windows provide a smoother and more lagged historical reference.</p>
+              <p>The objective is to examine Apple's historical price series alongside 20-, 50- and 200-observation rolling averages. This is exploratory historical analysis, not a study of price causes, investment performance, strategy profitability or future prices.</p>
+            </section>
+
+            <section id="stock-tools">
+              <h2>3. Tools &amp; Technologies</h2>
+              <ul>
+                <li><strong>Python and Jupyter Notebook:</strong> The environment used to run and document the analysis.</li>
+                <li><strong>yfinance:</strong> Requested historical market data.</li>
+                <li><strong>Pandas:</strong> Used to inspect tabular data, select the Apple price field, handle missing observations and calculate rolling means.</li>
+                <li><strong>Matplotlib:</strong> Created a static historical-price chart and a static chart with moving averages.</li>
+                <li><strong>Plotly Express:</strong> Created an interactive historical-price line chart.</li>
+                <li><strong>Plotly Graph Objects:</strong> Built the final interactive chart from individual price and moving-average traces.</li>
+                <li><strong>NumPy and Seaborn:</strong> NumPy is checked for package availability, and Seaborn is imported in the chart cell. The notebook does not demonstrate analytical use of either.</li>
+                <li><strong>scikit-learn and statsmodels:</strong> Checked during environment setup only; neither is used to build a model in this notebook.</li>
+              </ul>
+            </section>
+
+            <section id="stock-acquisition">
+              <h2>4. Data Sources &amp; Acquisition</h2>
+              <p>The notebook uses yfinance to request daily historical data for Apple plus six additional market instruments. The additional tickers provide other stocks and indices in the downloaded result; the subsequent preparation and moving-average analysis focus on Apple.</p>
+              <div class="stock-ticker-grid">
+                <p><code>AAPL</code> — Apple</p>
+                <p><code>GOOGL</code> — Alphabet</p>
+                <p><code>MSFT</code> — Microsoft</p>
+                <p><code>^GSPC</code> — S&amp;P 500</p>
+                <p><code>TSLA</code> — Tesla</p>
+                <p><code>^FTSE</code> — FTSE 100</p>
+                <p><code>^N225</code> — Nikkei 225</p>
+              </div>
+              <p>Start and end dates are calculated at execution time. The end date is the current date; the start date is calculated as five times 365 days earlier. `group_by='ticker'` requests ticker-grouped columns, and `threads=False` disables threaded downloads. The notebook does not explicitly set interval, `auto_adjust`, retry policy or fixed dates.</p>
+              <pre class="case-article__code"><code>{`tickers = ["AAPL", "GOOGL", "MSFT", "^GSPC", "TSLA", "^FTSE", "^N225"]
+
+end_date = datetime.today().strftime('%Y-%m-%d')
+start_date = (datetime.today() - timedelta(days=5*365)).strftime('%Y-%m-%d')
+
+data = yf.download(
+    tickers,
+    start=start_date,
+    end=end_date,
+    group_by='ticker',
+    threads=False
+)`}</code></pre>
+              <p class="stock-evidence-note"><strong>Saved-output caveat:</strong> The notebook's download cell records a Yahoo Finance rate-limit error and seven failed downloads. Later saved cells nevertheless contain populated Apple data, including a 1,299-row sample with 45 missing values before cleaning. These saved outputs do not establish a clean, consistent end-to-end rerun. Treat the displayed counts as saved notebook output, not as guaranteed results of a future execution.</p>
+            </section>
+
+            <section id="stock-preparation">
+              <h2>5. Data Inspection &amp; Preparation</h2>
+              <p>Data inspection uses `.head()` to preview Apple, Tesla and the wider downloaded data; `.columns` to list Apple's available fields; `len()` to count the Apple rows in the saved output; and `.isnull().sum()` to count missing values by field. The recorded Apple preview reports 1,299 rows and 45 missing values in the shown fields.</p>
+              <p>For analysis, the notebook prefers Apple's `Adj Close` field when present and falls back to `Close`. It copies the selected field, renames it to `Adjusted_Close`, forward-fills missing observations with the last known value, then drops any remaining rows containing nulls. In the saved preparation output, the fallback message indicates `Close` was selected; the missing-value count shown after cleaning is zero.</p>
+              <pre class="case-article__code"><code>{`if 'Adj Close' in data['AAPL'].columns:
+    aapl = data['AAPL'][['Adj Close']].copy()
+    aapl.rename(columns={'Adj Close': 'Adjusted_Close'}, inplace=True)
+else:
+    aapl = data['AAPL'][['Close']].copy()
+    aapl.rename(columns={'Close': 'Adjusted_Close'}, inplace=True)
+    print("⚠️ Using Close price because 'Adj Close' not found.")
+
+aapl.fillna(method='ffill', inplace=True)
+aapl.dropna(inplace=True)`}</code></pre>
+              <p>The saved output also contains a Pandas `FutureWarning` for `fillna(method='ffill')`, noting that this argument form is deprecated in that runtime. The notebook's code is shown as implemented rather than silently updated.</p>
+            </section>
+
+            <section id="stock-workflow">
+              <h2>6. Technical Workflow &amp; Code Examples</h2>
+              <h3>Stage 1 – Environment setup</h3>
+              <p>The notebook checks package availability with `importlib` for yfinance, Pandas, NumPy, Matplotlib, Seaborn, Plotly, scikit-learn and statsmodels. A second check collects missing imports, invokes pip through the active notebook interpreter using `sys.executable -m pip install`, and retries the imports. The saved output says yfinance was missing, the installation command completed, and the packages were then importable. Checking scikit-learn and statsmodels is not evidence that they were used for modelling.</p>
+              <pre class="case-article__code"><code>{`packages = ["yfinance", "pandas", "numpy", "matplotlib",
+            "seaborn", "plotly", "sklearn", "statsmodels"]
+
+cmd = [sys.executable, "-m", "pip", "install"] + missing
+subprocess.check_call(cmd)`}</code></pre>
+              <h3>Stage 2 – Financial data acquisition</h3>
+              <p>Using the seven-ticker list and dynamically calculated dates, `yf.download()` requests the historical data with ticker grouping and threaded downloads disabled. The Apple series is selected for the later analysis.</p>
+              <h3>Stage 3 – Data inspection</h3>
+              <p>The notebook previews data with `.head()`, checks Apple fields with `.columns`, counts its rows with `len()`, and checks missing observations using `.isnull().sum()`. These steps show the available structure and missing-value counts before preparation.</p>
+              <pre class="case-article__code"><code>{`print(data["AAPL"].columns)
+print(len(data["AAPL"]))
+print(data["AAPL"].isnull().sum())
+data["AAPL"].head()`}</code></pre>
+              <h3>Stage 4 – Apple data preparation</h3>
+              <p>The conditional selection, column rename, forward fill and removal of remaining nulls are shown in section 5. The source field is determined by the columns returned by yfinance.</p>
+              <h3>Stage 5 – Historical price exploration</h3>
+              <p>Matplotlib renders a blue static line against the date index. The source code labels its vertical axis "Sock Price (USD)". Plotly Express creates a second interactive line chart, changes its line to red, and labels the axes Date and Price (USD). These are separate static and interactive views of the prepared Apple series.</p>
+              <pre class="case-article__code"><code>{`plt.plot(aapl.index, aapl['Adjusted_Close'],
+         color='blue', linewidth=2)
+plt.title("Apple (AAPL) Stock Price Trend - Last 5 Years")
+plt.xlabel("Date")
+plt.ylabel("Sock Price (USD)")
+plt.show()
+
+fig = px.line(
+    aapl, x=aapl.index, y='Adjusted_Close',
+    title="Apple (AAPL) Stock Price Trend - Interactive View",
+    labels={"Adjusted_Close": "Price (USD)", "Date": "Date"}
+)
+fig.update_traces(line_color='red')
+fig.show()`}</code></pre>
+            </section>
+
+            <section id="stock-methodology">
+              <h2>7. Moving-Average Methodology</h2>
+              <p>The notebook calculates rolling arithmetic means from the prepared `Adjusted_Close` series:</p>
+              <pre class="case-article__code"><code>{`aapl['MA20'] = aapl['Adjusted_Close'].rolling(window=20).mean()
+aapl['MA50'] = aapl['Adjusted_Close'].rolling(window=50).mean()
+aapl['MA200'] = aapl['Adjusted_Close'].rolling(window=200).mean()`}</code></pre>
+              <ul>
+                <li><strong>20-day:</strong> averages 20 observations in each rolling window. It responds more quickly to recent price changes and makes shorter-window movement easier to compare.</li>
+                <li><strong>50-day:</strong> averages 50 observations, giving a smoother and slower-moving reference than the 20-day line.</li>
+                <li><strong>200-day:</strong> averages 200 observations, giving a still smoother, longer-window historical reference that responds more slowly.</li>
+              </ul>
+              <p>These are descriptive calculations over historical observations. They are lagging references and do not guarantee future direction or provide a validated trading signal.</p>
+            </section>
+
+            <section id="stock-visual-analysis">
+              <h2>8. Visual Analysis &amp; Interpretation</h2>
+              <p>In the saved final chart, the actual price line varies more sharply than the rolling averages. The 20-day average follows changes more closely than the 50-day and 200-day averages because its window includes fewer observations. The longer-window averages appear smoother and lag the more immediate movement.</p>
+              <p>The final Plotly Graph Objects figure adds four line traces: actual `Adjusted_Close`, `MA20`, `MA50` and `MA200`. Its saved layout sets a dark Plotly theme, Date x-axis, Price (USD) y-axis, and unified x-position hover. The notebook specifies a 950-by-550 figure. Its interactive view lets an analyst inspect aligned values across the series; the existing chart image above is the saved visual asset, not a newly generated chart.</p>
+              <pre class="case-article__code"><code>{`fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x=aapl.index,
+    y=aapl['Adjusted_Close'],
+    mode='lines',
+    name='Actual Price',
+    line=dict(color='blue', width=2)
+))
+
+fig.add_trace(go.Scatter(
+    x=aapl.index,
+    y=aapl['MA20'],
+    mode='lines',
+    name='20-Day MA',
+    line=dict(color='orange', width=2)
+))
+
+fig.add_trace(go.Scatter(
+    x=aapl.index,
+    y=aapl['MA50'],
+    mode='lines',
+    name='50-Day MA',
+    line=dict(color='green', width=2)
+))
+
+fig.add_trace(go.Scatter(
+    x=aapl.index,
+    y=aapl['MA200'],
+    mode='lines',
+    name='200-Day MA',
+    line=dict(color='red', width=2)
+))`}</code></pre>
+              <pre class="case-article__code"><code>{`fig.update_layout(
+    title='Apple (AAPL) Stock with 20, 50, and 200-Day Moving Averages',
+    xaxis_title='Date',
+    yaxis_title='Price (USD)',
+    template='plotly_dark',
+    hovermode='x unified',
+    width=950,
+    height=550
+)`}</code></pre>
+              <p>The notebook does not report particular crossover dates, percentage gains, investment returns, trading signals or forecast values. The work focuses on visual trend exploration rather than quantified investment performance.</p>
+            </section>
+
+            <section id="stock-takeaways">
+              <h2>9. Key Takeaways</h2>
+              <ul>
+                <li>The notebook implements environment checks, multi-ticker data retrieval, Apple-field selection, missing-value handling, rolling calculations and chart construction.</li>
+                <li>The final chart brings historical Apple prices and 20-, 50- and 200-observation rolling averages into one interactive view.</li>
+                <li>The shorter window responds more closely to recent observations; longer windows provide smoother, more lagged historical context.</li>
+                <li>The saved download cell reports rate limiting while later cells contain populated Apple data, so a clean end-to-end retrieval is not verified by the saved notebook state.</li>
+              </ul>
+              <h3>Potential business relevance</h3>
+              <p>This kind of visualisation can support historical market-trend monitoring, exploratory technical research, comparison of shorter- and longer-window historical direction, and communication of financial time-series data. These are potential applications; the notebook itself performs data retrieval and visual exploration and does not carry out investment decisions, trading, backtesting or formal forecasting.</p>
+            </section>
+
+            <section id="stock-limitations">
+              <h2>10. Limitations &amp; Considerations</h2>
+              <ul>
+                <li>The notebook does not demonstrate a backtested trading strategy or calculate buy/sell signals.</li>
+                <li>It does not establish predictive accuracy and does not provide a formal investment recommendation.</li>
+                <li>The five-year start date is recalculated from the execution date, so the retrieved window changes over time.</li>
+                <li>The selected price field depends on the fields returned by yfinance: `Adj Close` is preferred when present; otherwise the notebook uses `Close`.</li>
+                <li>Moving averages are calculated from past observations. They are descriptive and lagging references, not guaranteed predictors.</li>
+                <li>The saved download output reports Yahoo Finance rate limiting and failed downloads, while later cells retain populated Apple data. The saved notebook does not verify a clean end-to-end rerun.</li>
+                <li>The saved output shows that `fillna(method='ffill')` raised a Pandas deprecation warning in that environment.</li>
+                <li>No transaction-cost model, portfolio construction, return/risk evaluation, or formal comparison of the additional tickers is demonstrated.</li>
+              </ul>
+            </section>
+
+            <section id="stock-skills">
+              <h2>11. Skills Demonstrated</h2>
+              <ul>
+                <li>Financial market data retrieval with the yfinance library.</li>
+                <li>Data inspection and preparation using Pandas.</li>
+                <li>Missing-observation checks, forward filling and removal of remaining null rows.</li>
+                <li>Rolling-window calculations for 20-, 50- and 200-day means.</li>
+                <li>Historical time-series exploration.</li>
+                <li>Static chart creation with Matplotlib.</li>
+                <li>Interactive chart development with Plotly Express and Plotly Graph Objects.</li>
+                <li>Communicating what a chart shows while distinguishing historical description from prediction or investment advice.</li>
+              </ul>
+            </section>
+          </>
+        ) : project.slug === 'fitness-centre-analytics' ? (
+          <FitnessCaseStudy project={project} />
+        ) : project.slug === 'clinic-analysis' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#clinic-overview">Project Overview</a>
+                <a href="#clinic-context">Background &amp; Objectives</a>
+                <a href="#clinic-tools">Tools &amp; Technologies</a>
+                <a href="#clinic-data">Dataset Overview &amp; Source</a>
+                <a href="#clinic-cleaning">Python Data Cleaning</a>
+                <a href="#clinic-features">Feature Engineering</a>
+                <a href="#clinic-eda">Exploratory Analysis</a>
+                <a href="#clinic-power-query">Power Query &amp; Python</a>
+                <a href="#clinic-dashboard">Power BI Dashboard</a>
+                <a href="#clinic-questions">Analytical Questions</a>
+                <a href="#clinic-limitations">Limitations</a>
+                <a href="#clinic-skills">Skills &amp; Learning</a>
+              </div>
+            </nav>
+
+            <section id="clinic-overview">
+              <h2>1. Project Overview</h2>
+              <p>This self-directed project was developed while learning Python through the EDNA Scholarship programme. It follows clinic records from CSV inspection and preparation in a Jupyter Notebook through exploratory analysis and reporting in Power BI. The analysis focuses on recorded financial fields and the timing of patient entries; it is a learning project, not a client engagement or production healthcare system.</p>
+              <div class="clinic-kpi-grid" aria-label="Selected displayed figures">
+                <div class="clinic-kpi"><strong>29,999</strong><span>Rows reported by the notebook's initial data inspection</span></div>
+                <div class="clinic-kpi"><strong>6,915</strong><span>Count of Patient ID in the available Corporate-filtered screenshot</span></div>
+                <div class="clinic-kpi"><strong>$256K</strong><span>Total Revenue card in that same displayed screenshot</span></div>
+              </div>
+              <figure class="case-image case-image--gallery clinic-dashboard-image">
+                <img
+                  class="case-image__dashboard"
+                  src={withBase(project.image ?? '/images/projects/clinic-analysis.png')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 1280}
+                  height={project.imageHeight ?? 724}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+            </section>
+
+            <section id="clinic-context">
+              <h2>2. Project Background &amp; Objectives</h2>
+              <p>Clinic datasets can place financial entries, patient categories and event timestamps in the same record. Preparing these fields consistently makes it possible to examine how recorded activity varies across categories and time. Here, the notebook derives financial and hour/day fields and uses descriptive charts to explore those relationships.</p>
+              <p>The project objective was to inspect and prepare the data in Python, investigate weekday and hour patterns in patient entries and the notebook's calculated financial total, then carry prepared information into Power BI. The analysis does not measure waiting time, doctor productivity, profitability or operational savings.</p>
+            </section>
+
+            <section id="clinic-tools">
+              <h2>3. Tools &amp; Technologies</h2>
+              <ul>
+                <li><strong>Python and Jupyter Notebook:</strong> The environment used to load the CSV, document transformations and explore results.</li>
+                <li><strong>Pandas:</strong> Used for CSV loading, column preparation, financial conversion, missing-value handling, feature creation, aggregation, pivot tables and CSV export.</li>
+                <li><strong>Matplotlib:</strong> Used for figures in the notebook and for setting a dark plotting style.</li>
+                <li><strong>Seaborn:</strong> Used to create boxplots, violin plots, heatmaps and two-dimensional KDE density plots.</li>
+                <li><strong>Power Query:</strong> Used to import the original and prepared CSV files, assign data types and make a Python transformation within a query.</li>
+                <li><strong>Power BI:</strong> Used to present two report pages, Financial Class and Doctor Type, with category views and patient/revenue visuals.</li>
+              </ul>
+            </section>
+
+            <section id="clinic-data">
+              <h2>4. Dataset Overview &amp; Source</h2>
+              <p>The notebook loads <code>hospital_data.csv</code> into a Pandas DataFrame and its saved <code>data.info()</code> output reports 29,999 records and 12 source columns. The fields include Date, Medication Revenue, Lab Cost, Consultation Revenue, Doctor Type, Financial Class, Patient Type, Entry Time, Post-Consultation Time, Completion Time, Doctor and Patient ID. The initial output shows the fields as object/string data, including the formatted financial values.</p>
+              <p>The notebook is the evidence for the Python workflow and its saved outputs. The Power BI file contains report pages titled Financial Class and Doctor Type. The Power Query source scripts supplied with the project describe separate imports of the original CSV and the processed export.</p>
+            </section>
+
+            <section id="clinic-cleaning">
+              <h2>5. Python Data Cleaning Process</h2>
+              <p>The notebook first replaces the original spaced column labels with a clean 12-name list, then applies <code>str.strip()</code>. A custom function handles the three financial text columns: it preserves nulls for later treatment, converts values to strings, removes currency symbols, underscores, hyphens, commas and spaces, then uses <code>pd.to_numeric(..., errors='coerce')</code>.</p>
+              <pre class="case-article__code"><code>{`def clean_text(x):
+    if pd.isnull(x):
+        return x
+    x = str(x)
+    x = x.replace('$', '')
+    x = x.replace('_', '')
+    x = x.replace('-', '')
+    x = x.replace(',', '')
+    x = x.replace(' ', '')
+    x = pd.to_numeric(x, errors='coerce')
+    return x
+
+data['Medication Revenue'] = data['Medication Revenue'].apply(clean_text)
+data['Lab Cost'] = data['Lab Cost'].apply(clean_text)
+data['Consultation Revenue'] = data['Consultation Revenue'].apply(clean_text)`}</code></pre>
+              <p>After those conversions, the notebook runs <code>data = data.fillna(0)</code> across the whole DataFrame. That changes missing values to zero in financial and non-financial columns alike. It assumes every missing value can be treated as zero, which may not be appropriate, and the notebook does not demonstrate validation against the source system.</p>
+            </section>
+
+            <section id="clinic-features">
+              <h2>6. Feature Engineering &amp; Time Extraction</h2>
+              <h3>Notebook financial total</h3>
+              <p>The field named <code>Total Revenue</code> is calculated row by row by adding Medication Revenue, Lab Cost and Consultation Revenue:</p>
+              <pre class="case-article__code"><code>{`data['Total Revenue'] = (
+    data['Medication Revenue']
+    + data['Lab Cost']
+    + data['Consultation Revenue']
+)`}</code></pre>
+              <p>This is the notebook's sum of the three named fields, including Lab Cost. It is not evidence of profit or net income, because the calculation does not establish that all operating expenses have been deducted; the field name should not be read as a validated accounting measure.</p>
+              <h3>Hour and weekday features</h3>
+              <p>A helper converts each time value with <code>pd.to_datetime()</code> and returns its hour. The notebook applies it to Entry Time, Post-Consultation Time and Completion Time. These are hour-of-day features; the notebook does not subtract the timestamps to calculate waiting time or consultation duration.</p>
+              <pre class="case-article__code"><code>{`def get_hour(x):
+    x = pd.to_datetime(x)
+    x = x.hour
+    return x
+
+data['Entry Hour'] = data['Entry Time'].apply(get_hour)
+data['Post Consultation Hour'] = (
+    data['Post-Consultation Time'].apply(get_hour)
+)
+data['Completion Hour'] = data['Completion Time'].apply(get_hour)`}</code></pre>
+              <p>The Date field is converted to datetime, then represented as both a numeric weekday index (Monday is 0 through Sunday as 6) and a weekday name. The numeric value supports plotting against the day axis; the name is used for grouping and readable heatmap columns.</p>
+              <pre class="case-article__code"><code>{`data['Date'] = pd.to_datetime(data['Date'])
+data['dayofweek'] = data['Date'].dt.dayofweek
+data['weekday name'] = data['Date'].dt.strftime('%A')`}</code></pre>
+            </section>
+
+            <section id="clinic-eda">
+              <h2>7. Exploratory Data Analysis</h2>
+              <p>The notebook sets Matplotlib's <code>dark_background</code> style and uses Pandas, Matplotlib and Seaborn for descriptive exploration. It groups <code>Total Revenue</code> by weekday and sums the values; the saved output ranges from $97,480.16 on Thursday to $266,648.00 on Monday. These amounts reflect the notebook's calculated field and should not be interpreted as profit or as independently validated clinic revenue.</p>
+              <p>A Seaborn boxplot compares the distribution of row-level Total Revenue by weekday with outlier markers hidden (<code>showfliers=False</code>), while the violin plot shows the distribution shape by weekday. These are distribution views, not causal explanations.</p>
+              <h3>Weekday and entry-hour pivot tables</h3>
+              <p>For revenue activity, <code>pivot_table</code> sums Total Revenue for each Entry Hour and weekday. Seaborn renders the resulting matrix as a heatmap; the notebook repeats this revenue heatmap with different colour maps. A second pivot counts Patient ID by the same hour/day combinations for a patient-activity heatmap.</p>
+              <pre class="case-article__code"><code>{`pivot = pd.pivot_table(
+    data,
+    index='Entry Hour',
+    columns='weekday name',
+    values='Total Revenue',
+    aggfunc='sum'
+)`}</code></pre>
+              <pre class="case-article__code"><code>{`pivot = pd.pivot_table(
+    data,
+    index='Entry Hour',
+    columns='weekday name',
+    values='Patient ID',
+    aggfunc='count'
+)`}</code></pre>
+              <p>The two-dimensional KDE plot maps numeric weekday to Entry Hour and fills the density contours with the <code>magma</code> colour map. It is a smoothed density visual, not a count table. Together, the heatmaps and KDE make weekday/hour patterns easier to inspect; the notebook does not state verified peak counts or explain why any pattern occurs.</p>
+              <pre class="case-article__code"><code>{`sns.kdeplot(
+    x=data['dayofweek'],
+    y=data['Entry Hour'],
+    fill=True,
+    cmap='magma'
+)`}</code></pre>
+              <p>Finally, the notebook exports the processed DataFrame with <code>data.to_csv('cleaned_clinic_data.csv')</code>. The resulting file can be selected as a Power BI input; because <code>index=False</code> is not specified, Pandas also writes the DataFrame index.</p>
+            </section>
+
+            <section id="clinic-power-query">
+              <h2>8. Power Query &amp; Python Integration</h2>
+              <h3>Original CSV preparation</h3>
+              <p>A supplied Power Query script imports the original CSV with <code>Csv.Document</code>, promotes headers and assigns field types. It replaces <code>$-</code> with <code>0</code> in Lab Cost and converts that column to Currency.Type. This is a separate Power Query preparation route on the original input; it is distinct from the notebook's Python cleaning and its exported cleaned file.</p>
+              <pre class="case-article__code"><code>{`Source = Csv.Document(
+    File.Contents("...hospital_data.csv"),
+    [Delimiter=",", Columns=12, Encoding=1252,
+     QuoteStyle=QuoteStyle.None]
+)`}</code></pre>
+              <h3>Notebook-prepared CSV import</h3>
+              <p>The supplied cleaned-data query imports 19 columns, assigns types to the date, financial, category, time, person-ID and derived hour/weekday fields, and renames the first blank column to <code>Index</code>. This describes its column name only; the project evidence does not establish a further business meaning for that field.</p>
+              <h3>Python transformation inside Power Query</h3>
+              <p>Separate from the Jupyter Notebook workflow, the supplied Power Query Python script creates a weekday-by-entry-hour count pivot from its <code>dataset</code> input, renames the resulting columns to weekday abbreviations and resets the index:</p>
+              <pre class="case-article__code"><code>{`import pandas as pd
+
+pivot = pd.pivot_table(
+    dataset,
+    index='Entry Hour',
+    columns='weekday name',
+    values='Patient ID',
+    aggfunc='count'
+)
+
+pivot.columns = ['Mon', 'Tue', 'Weds', 'Thurs', 'Fri', 'Sat', 'Sun']
+pivot = pivot.reset_index()`}</code></pre>
+              <p>This query transformation prepares a patient-count matrix for the report. It does not replace or extend the notebook calculations unless the report query specifically uses that output.</p>
+            </section>
+
+            <section id="clinic-dashboard">
+              <h2>9. Power BI Dashboard Walkthrough</h2>
+              <p>The PBIX contains two report pages, Financial Class and Doctor Type. The available screenshot below is the Financial Class view with Corporate selected. It shows category navigation for Corporate, HMO, Insurance, Medicare and Private; KPI cards for Count of Patient ID and Total Revenue; a patient-entry trend combining patient count with revenue; a revenue activity heatmap; and a patient activity density visual.</p>
+              <p>The Power BI file also contains a Doctor Type page with Anchor, Floating and Locum categories and the same described patient/revenue, trend and time-activity visual structure. A separate Doctor Type screenshot was not available among the project image files, so no replacement image has been created.</p>
+              <div class="clinic-dashboard-figures">
+                <div>
+                  <h3>Financial Class view</h3>
+                  <p>The supplied dashboard description reports approximately <strong>22K</strong> patient count and <strong>$843.99K</strong> total revenue for this view. The available Corporate-selected screenshot instead visibly shows <strong>6,915</strong> and <strong>$256K</strong> in its cards.</p>
+                </div>
+                <div>
+                  <h3>Doctor Type view</h3>
+                  <p>The supplied dashboard description reports approximately <strong>30.00K</strong> patient count and <strong>$1.14M</strong> total revenue for this view. These figures are reported as displayed, not as verified distinct-patient or non-overlapping totals.</p>
+                </div>
+              </div>
+              <p class="case-article__callout">The reported values belong to different report views or filter states. Their exact KPI definitions and filter context have not been independently verified from the report calculations, so they should not be added together or treated as distinct patient counts or disjoint revenue.</p>
+            </section>
+
+            <section id="clinic-questions">
+              <h2>10. Analytical Questions &amp; Observations</h2>
+              <ul>
+                <li>Which weekdays and hours have relatively high patient-entry activity? The patient-count heatmap and KDE are designed to expose the distribution across those dimensions.</li>
+                <li>How does the notebook's calculated financial total vary by weekday and entry hour? The grouped sum and revenue heatmap support comparison, with the financial-total caveat above.</li>
+                <li>How does the row-level Total Revenue distribution differ across weekdays? The boxplot and violin plot offer complementary distribution views.</li>
+                <li>How can Financial Class and Doctor Type be used to explore clinic activity? The report pages organize views around those categories, but further interpretation depends on their exact filter and KPI definitions.</li>
+                <li>How can heatmaps and density plots reveal patterns that summary cards do not show? They reveal how activity is distributed across weekday/hour combinations rather than only showing a top-level number.</li>
+              </ul>
+              <p>These are exploratory questions, not established operational findings. The supplied notebook and screenshots do not prove staffing shortages, doctor productivity differences, patient waiting times, profitability, operational efficiency or cost savings.</p>
+            </section>
+
+            <section id="clinic-limitations">
+              <h2>11. Limitations &amp; Data-Quality Considerations</h2>
+              <ul>
+                <li><code>fillna(0)</code> is applied to the entire DataFrame, so missing non-financial values are also replaced with zero. The notebook does not validate this assumption against the source system.</li>
+                <li>The financial cleaning function strips hyphens and other characters. Its behaviour should be checked against the source conventions; for example, it does not distinguish an em dash from a negative sign through a documented rule.</li>
+                <li>The supplied notebook does not demonstrate a formal duplicate-record investigation or a formal outlier investigation.</li>
+                <li>No verified waiting-time, consultation-duration, doctor-productivity or profitability calculation is shown.</li>
+                <li>The notebook's Total Revenue formula adds Lab Cost to two fields named as revenue. Its output is therefore a calculated sum of the three fields, not demonstrated profit or net income.</li>
+                <li>The dashboard screenshots do not establish the exact definition of each KPI card. The displayed values vary by view/filter context and are not safe to combine without checking the PBIX calculations.</li>
+                <li>The project does not establish that missing values, duplicates or all other data-quality issues were fully resolved.</li>
+              </ul>
+            </section>
+
+            <section id="clinic-skills">
+              <h2>12. Skills Demonstrated &amp; Learning Outcomes</h2>
+              <p>This project documents practical development through the EDNA Scholarship learning experience, from loading and inspecting a CSV through preparing fields for interactive reporting.</p>
+              <ul>
+                <li>Loading and inspecting tabular data with Pandas.</li>
+                <li>Writing a custom cleaning function and converting formatted financial text to numeric values.</li>
+                <li>Handling missing observations, with awareness of the assumptions made by zero imputation.</li>
+                <li>Creating calculated financial and time-based columns.</li>
+                <li>Grouping and aggregating data, and building weekday/hour pivot tables.</li>
+                <li>Creating boxplots, violin plots, heatmaps and density visualisations with Matplotlib and Seaborn.</li>
+                <li>Using Python within a Power Query transformation.</li>
+                <li>Connecting data preparation steps to Power BI report pages while distinguishing exploratory analysis from operational conclusions.</li>
+              </ul>
+            </section>
+          </>
+        ) : project.slug === 'russian-alcohol-consumption' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#russian-overview">Project Overview</a>
+                <a href="#russian-objective">Objective</a>
+                <a href="#russian-contribution">My Contribution</a>
+                <a href="#russian-data-preparation">Data Preparation</a>
+                <a href="#russian-dashboard-analysis">Dashboard Analysis</a>
+                <a href="#russian-insights">Key Insights</a>
+                <a href="#russian-business-value">Business Value</a>
+                <a href="#russian-tools">Tools &amp; Skills</a>
+                <a href="#russian-forecasting">Forecasting Future Consumption</a>
+              </div>
+            </nav>
+
+            <section id="russian-overview">
+              <h2>Project Overview</h2>
+              <p>An analysis of alcohol consumption patterns across Russian regions, exploring historical trends, regional preferences, category performance and future consumption patterns.</p>
+              <figure class="case-image">
+                <img
+                  class:list={project.imageFit === 'contain' ? 'case-image__dashboard' : undefined}
+                  src={withBase(project.image ?? '/images/projects/russian-alcohol-consumption.webp')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 1200}
+                  height={project.imageHeight ?? 656}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+            </section>
+
+            <section id="russian-objective">
+              <h2>Objective</h2>
+              <p>To identify differences in alcohol consumption across regions, evaluate wine and alcohol growth trends, and highlight regional opportunities through comparative and time-series analysis.</p>
+            </section>
+
+            <section id="russian-contribution">
+              <h2>My Contribution</h2>
+              <p>Sourced and prepared the dataset, transformed it using Power Query, and developed interactive Power BI dashboards to analyse alcohol consumption by year, region and beverage category.</p>
+            </section>
+
+            <section id="russian-data-preparation">
+              <h2>Data Preparation</h2>
+              <p>Using Power Query, I:</p>
+              <ul>
+                <li>Imported the Russian alcohol consumption Excel dataset and promoted the first row to headers.</li>
+                <li>Assigned appropriate data types to the year, region and consumption fields.</li>
+                <li>Removed blank rows and records containing errors in the year field.</li>
+                <li>Filtered out records where wine or brandy consumption was null.</li>
+                <li>Unpivoted the alcohol category columns while retaining Year and Region.</li>
+                <li>Renamed the resulting Attribute and Value columns to <code>AlcoholType</code> and <code>Consumption</code>.</li>
+              </ul>
+              <p class="russian-alcohol__closing">This transformed the dataset into a consistent structure for comparing consumption across beverage categories, regions and years.</p>
+            </section>
+
+            <section id="russian-dashboard-analysis">
+              <h2>Dashboard Analysis</h2>
+              <ul>
+                <li><strong>Regional Overview:</strong> Compared total consumption, average consumption and beverage preferences across regions.</li>
+                <li><strong>Alcohol Category Analysis:</strong> Examined consumption distribution and growth across beer, wine, vodka, brandy and champagne.</li>
+                <li><strong>Wine Performance:</strong> Analysed wine consumption, regional contribution, growth rates and comparisons with Saint Petersburg.</li>
+                <li><strong>Trend &amp; Forecasting:</strong> Explored historical consumption patterns and projected future consumption.</li>
+              </ul>
+            </section>
+
+            <section id="russian-insights">
+              <h2>Key Insights</h2>
+              <ul>
+                <li>Beer accounted for the largest share of overall alcohol consumption in the displayed dashboard.</li>
+                <li>Champagne recorded the highest category growth at 7.28%, followed by beer at 3.37% and wine at 2.37%.</li>
+                <li>Wine consumption varied considerably across regions, creating opportunities for regional comparison.</li>
+                <li>The dashboard highlighted differences in wine growth and consumption share, helping distinguish high-volume regions from faster-growing markets.</li>
+              </ul>
+            </section>
+
+            <section id="russian-business-value">
+              <h2>Business Value</h2>
+              <p>The analysis provides a regional view of consumption patterns that can support market comparison, product planning and identification of potential growth opportunities.</p>
+            </section>
+
+            <section id="russian-tools">
+              <h2>Tools &amp; Skills</h2>
+              <p>Power BI · Power Query · Data Transformation · Time-Series Analysis · Forecasting · Regional Analysis · Data Visualisation</p>
+            </section>
+
+            <section id="russian-forecasting">
+              <h2>Forecasting Future Consumption</h2>
+              <p>Used Power BI's built-in Analytics pane Forecast feature to project future alcohol consumption from historical trends. Configured a 10-point forecast horizon, with seasonality set to automatic. The visual includes a confidence interval to communicate uncertainty around the projected values.</p>
+            </section>
+          </>
+        ) : project.slug === 'credit-risk-analysis' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#credit-overview">Project Overview</a>
+                <a href="#credit-contribution">My Contribution</a>
+                <a href="#credit-data">Data Preparation &amp; Modelling</a>
+                <a href="#credit-analysis">Analysis &amp; Dashboard</a>
+                <a href="#credit-insights">Key Insights</a>
+                <a href="#credit-recommendations">Business Recommendations</a>
+                <a href="#credit-tools">Tools &amp; Skills</a>
+              </div>
+            </nav>
+
+            <section id="credit-overview">
+              <h2>Project Overview</h2>
+              <p>A credit risk analytics project developed for a hypothetical bank as part of the Onyx Data Challenge. The objective was to examine loan default patterns, assess borrower risk characteristics and identify indicators that could support better lending decisions.</p>
+              <figure class="case-image">
+                <img
+                  class:list={project.imageFit === 'contain' ? 'case-image__dashboard' : undefined}
+                  src={withBase(project.image ?? '/images/projects/credit-risk-analysis.webp')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 1200}
+                  height={project.imageHeight ?? 651}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+            </section>
+
+            <section id="credit-contribution">
+              <h2>My Contribution</h2>
+              <p>Performed data preparation and analysis, structured the dataset into analytical tables, developed DAX measures and built an interactive Power BI dashboard using ZoomCharts visuals.</p>
+            </section>
+
+            <section id="credit-data">
+              <h2>Data Preparation &amp; Modelling</h2>
+              <p>Using Power Query, I:</p>
+              <ul>
+                <li>Imported the credit risk dataset from Excel and promoted the first row to column headers.</li>
+                <li>Assigned appropriate data types to fields, including client IDs, income, age, loan amounts, financial ratios and geographic coordinates.</li>
+                <li>Removed rows containing errors and eliminated duplicate records.</li>
+                <li>Created separate analytical queries for the cleaned credit risk data, loan facts, client information, loan details and location data.</li>
+                <li>Used column selection and removal to retain relevant fields for each analytical table.</li>
+              </ul>
+              <p class="credit-risk__closing">This preparation organised borrower, loan and geographic attributes into a more structured reporting model.</p>
+            </section>
+
+            <section id="credit-analysis">
+              <h2>Analysis &amp; Dashboard</h2>
+              <p>Developed seven interactive report sections covering:</p>
+              <ul>
+                <li><strong>Portfolio Summary:</strong> Loan volume, default value, default rate and average loan amount.</li>
+                <li><strong>Default Analysis:</strong> Default patterns across borrower and loan characteristics.</li>
+                <li><strong>Risk Analysis:</strong> Relationships between financial indicators and loan defaults.</li>
+                <li><strong>Key Risk Indicators:</strong> Examination of borrower risk characteristics.</li>
+                <li><strong>Risk Breakdown:</strong> Default patterns across different borrower segments.</li>
+                <li><strong>Comparative Risk Analysis:</strong> Comparison of risk across loan categories and borrower groups.</li>
+                <li><strong>Recommendations:</strong> Practical lending and risk management actions.</li>
+              </ul>
+            </section>
+
+            <section id="credit-insights">
+              <h2>Key Insights</h2>
+              <div class="credit-risk__kpis">
+                <article class="credit-risk__kpi">
+                  <h3>Default Rate</h3>
+                  <p><strong>21.8%</strong> across the displayed portfolio.</p>
+                </article>
+                <article class="credit-risk__kpi">
+                  <h3>Debt-to-Income</h3>
+                  <p>The high DTI group recorded a <strong>74.7%</strong> default rate in the displayed analysis.</p>
+                </article>
+                <article class="credit-risk__kpi">
+                  <h3>Credit History</h3>
+                  <p>Borrowers with previous defaults recorded a <strong>37.8%</strong> default rate, compared with <strong>18.4%</strong> for those without previous defaults.</p>
+                </article>
+                <article class="credit-risk__kpi">
+                  <h3>Employment Stability</h3>
+                  <p>The 0–2 years employment group recorded a <strong>27.4%</strong> default rate, compared with <strong>16.3%</strong> for the 10+ years group.</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="credit-recommendations">
+              <h2>Business Recommendations</h2>
+              <ul>
+                <li>Apply additional credit assessment checks to borrowers with high debt-to-income ratios.</li>
+                <li>Use previous defaults and credit utilisation as indicators for closer monitoring.</li>
+                <li>Consider employment stability and repayment capacity during loan assessment.</li>
+                <li>Apply risk-based pricing to balance lending returns against default exposure.</li>
+              </ul>
+            </section>
+
+            <section id="credit-tools">
+              <h2>Tools &amp; Skills</h2>
+              <p>Power BI · Power Query · DAX · ZoomCharts · Data Cleaning · Data Modelling · Credit Risk Analysis · Data Visualisation</p>
+            </section>
+          </>
+        ) : project.slug === 'pharmacy-sales-profitability' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#pharmacy-overview">Project Overview</a>
+                <a href="#pharmacy-objective">Objective</a>
+                <a href="#pharmacy-contribution">My Contribution</a>
+                <a href="#pharmacy-process">Tools &amp; Process</a>
+                <a href="#pharmacy-dashboard-analysis">Dashboard Analysis</a>
+                <a href="#pharmacy-insights">Key Insights</a>
+                <a href="#pharmacy-recommendations">Business Recommendations</a>
+                <a href="#pharmacy-learning">What I Learned</a>
+              </div>
+            </nav>
+
+            <section id="pharmacy-overview">
+              <h2>Project Overview</h2>
+              <p>An interactive pharmaceutical distribution analytics dashboard developed to evaluate sales performance, product profitability and geographic contribution across European markets. The analysis examines revenue, margins, units sold, promotional efficiency and sales trends to support commercial decision-making.</p>
+              <figure class="case-image">
+                <img
+                  class:list={project.imageFit === 'contain' ? 'case-image__dashboard' : undefined}
+                  src={withBase(project.image ?? '/images/projects/pharmacy-sales-profitability.webp')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 897}
+                  height={project.imageHeight ?? 478}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+            </section>
+
+            <section id="pharmacy-objective">
+              <h2>Objective</h2>
+              <p>To identify the products, countries and pharmacy segments driving revenue and profitability, evaluate sales trends and assess how promotional activities affect profit margins.</p>
+            </section>
+
+            <section id="pharmacy-contribution">
+              <h2>My Contribution</h2>
+              <p>Designed and developed a multi-page Power BI dashboard, combining financial KPIs, product-level analysis, geographic visualisation and time-based performance comparisons. Translated sales data into business insights and recommendations for product optimisation and market performance.</p>
+            </section>
+
+            <section id="pharmacy-process">
+              <h2>Tools &amp; Process</h2>
+              <ul>
+                <li><strong>Power BI:</strong> Developed the interactive dashboard and analytical report pages.</li>
+                <li><strong>DAX:</strong> Used measures to evaluate revenue, total margin, costs, units sold, growth and margin percentages.</li>
+                <li><strong>Data Analysis:</strong> Examined product categories, brands, pharmacy performance, country contributions and promotional effectiveness.</li>
+                <li><strong>ZoomCharts:</strong> Incorporated interactive visualisations for geographic analysis, product profitability and performance trends.</li>
+              </ul>
+            </section>
+
+            <section id="pharmacy-dashboard-analysis">
+              <h2>Dashboard Analysis</h2>
+              <ol>
+                <li><strong>1. Executive Summary:</strong> Provides an overview of revenue, margin, costs, units sold, growth and country-level revenue contribution.</li>
+                <li><strong>2. Product Performance:</strong> Examines product category revenue, units sold, margin contribution and product-level profitability.</li>
+                <li><strong>3. Geographic Performance:</strong> Compares country-level margins, revenue concentration, pharmacy segments and geographic performance.</li>
+                <li><strong>4. Time &amp; Trend Performance:</strong> Analyses monthly revenue, margin and unit trends, rolling revenue momentum and seasonal performance patterns.</li>
+              </ol>
+            </section>
+
+            <section id="pharmacy-insights">
+              <h2>Key Insights</h2>
+              <div class="pharmacy-kpi-grid">
+                <article class="pharmacy-kpi-card">
+                  <h3>Overall Performance</h3>
+                  <p>Generated dashboard-reported revenue of approximately <strong>€8.63M</strong>, total margin of <strong>€2.42M</strong> and <strong>445.79K</strong> units sold.</p>
+                </article>
+                <article class="pharmacy-kpi-card">
+                  <h3>Profitability</h3>
+                  <p>Recorded an average margin of <strong>28.0%</strong>.</p>
+                </article>
+                <article class="pharmacy-kpi-card">
+                  <h3>Geographic Contribution</h3>
+                  <p>Germany led country revenue contribution at approximately <strong>€1.57M</strong>, followed by France at <strong>€1.41M</strong> and Italy at <strong>€1.33M</strong>.</p>
+                </article>
+                <article class="pharmacy-kpi-card">
+                  <h3>Product Performance</h3>
+                  <p>Prescription products generated the largest category revenue contribution, at approximately <strong>€2.8M</strong>.</p>
+                </article>
+                <article class="pharmacy-kpi-card">
+                  <h3>Promotional Efficiency</h3>
+                  <p>Promoted products recorded a <strong>19.9%</strong> margin compared with <strong>29.0%</strong> for non-promoted products, indicating lower margin efficiency among promoted products.</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="pharmacy-recommendations">
+              <h2>Business Recommendations</h2>
+              <ul>
+                <li>Review promotional pricing and discount strategies to improve margin efficiency.</li>
+                <li>Prioritise high-performing products while monitoring lower-margin product categories.</li>
+                <li>Evaluate opportunities for growth in countries with strong revenue and profitability performance.</li>
+                <li>Use seasonal trends to improve inventory planning and sales forecasting.</li>
+              </ul>
+            </section>
+
+            <section id="pharmacy-learning">
+              <h2>What I Learned</h2>
+              <p>Strengthened my practical experience in sales and profitability analysis, DAX-based financial calculations, geographic performance reporting and interactive Power BI dashboard development using ZoomCharts.</p>
+            </section>
+          </>
+        ) : project.slug === 'hr-analytics' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#hr-overview">Project Overview</a>
+                <a href="#hr-objective">Objective</a>
+                <a href="#hr-contribution">My Contribution</a>
+                <a href="#hr-tools">Tools &amp; Process</a>
+                <a href="#hr-dashboard-analysis">Dashboard Analysis</a>
+                <a href="#hr-insights">Key Insights</a>
+                <a href="#hr-recommendations">Recommendations</a>
+                <a href="#hr-learning">What I Learned</a>
+              </div>
+            </nav>
+
+            <section id="hr-overview">
+              <h2>Project Overview</h2>
+              <p>A three-page HR analytics dashboard developed to examine workforce composition, employee costs, attrition, retention, engagement and recruitment performance. The project transforms HR metrics into interactive insights to support workforce planning and people-related decisions.</p>
+            </section>
+
+            <section id="hr-objective">
+              <h2>Objective</h2>
+              <p>To evaluate employee turnover, monitor salary costs against budget, identify workforce trends and examine recruitment and retention indicators across departments.</p>
+            </section>
+
+            <section id="hr-contribution">
+              <h2>My Contribution</h2>
+              <p>Completed the project as part of the ZoomCharts HR Analytics Challenge, despite missing the submission deadline. Developed the three-page Power BI dashboard, created analytical measures using DAX and designed interactive reports using ZoomCharts visualisations.</p>
+            </section>
+
+            <section id="hr-tools">
+              <h2>Tools &amp; Process</h2>
+              <ul>
+                <li><strong>Power BI:</strong> Developed three interconnected analytical report pages.</li>
+                <li><strong>DAX:</strong> Created measures for headcount, FTE, salary variance, attrition, termination, retention and recruitment KPIs.</li>
+                <li><strong>Data Analysis:</strong> Examined workforce costs, employee exits, tenure, engagement and recruitment performance.</li>
+                <li><strong>ZoomCharts:</strong> Used interactive visualisations to explore departmental performance, workforce trends and employee-related metrics.</li>
+              </ul>
+            </section>
+
+            <section id="hr-dashboard-analysis" class="hr-dashboard-pages">
+              <h2>Dashboard Analysis</h2>
+              <div class="hr-dashboard-page">
+                <h3>1. Executive Overview</h3>
+                <p>Examines workforce size, FTE utilisation, salary expenditure, budget variance and employee terminations across departments.</p>
+                <figure class="case-image">
+                  <img class="case-image__dashboard" src={withBase(project.image ?? '/images/projects/hr-analytics.webp')} alt={project.imageAlt ?? ''} width={project.imageWidth ?? 1200} height={project.imageHeight ?? 677} loading="lazy" decoding="async" />
+                  <figcaption>{project.imageCaption ?? 'HR Analytics Dashboard — Executive Overview.'}</figcaption>
+                </figure>
+              </div>
+              <div class="hr-dashboard-page">
+                <h3>2. Attrition &amp; Termination Analysis</h3>
+                <p>Explores voluntary and involuntary exits, attrition rates, employee tenure, termination reasons and geographical patterns.</p>
+                {project.galleryImages?.[0] && (
+                  <figure class="case-image case-image--gallery">
+                    <img src={withBase(project.galleryImages[0].src)} alt={project.galleryImages[0].alt} width={project.galleryImages[0].width} height={project.galleryImages[0].height} loading="lazy" decoding="async" />
+                    <figcaption>HR Analytics Dashboard — Attrition &amp; Termination Analysis.</figcaption>
+                  </figure>
+                )}
+              </div>
+              <div class="hr-dashboard-page">
+                <h3>3. Retention Drivers &amp; Recruitment</h3>
+                <p>Examines employee engagement, high-performer distribution, recruitment fill rates, time-to-fill and absence patterns.</p>
+                {project.galleryImages?.[1] && (
+                  <figure class="case-image case-image--gallery">
+                    <img src={withBase(project.galleryImages[1].src)} alt={project.galleryImages[1].alt} width={project.galleryImages[1].width} height={project.galleryImages[1].height} loading="lazy" decoding="async" />
+                    <figcaption>HR Analytics Dashboard — Retention Drivers &amp; Recruitment.</figcaption>
+                  </figure>
+                )}
+              </div>
+            </section>
+
+            <section id="hr-insights">
+              <h2>Key Insights</h2>
+              <div class="hr-kpi-grid">
+                <article class="hr-kpi-card">
+                  <h3>Workforce</h3>
+                  <p><strong>999 employees and 969 FTE</strong>, with FTE utilisation of <strong>96.96%</strong>.</p>
+                </article>
+                <article class="hr-kpi-card">
+                  <h3>Compensation</h3>
+                  <p>Actual salary expenditure of approximately <strong>$96M</strong> against a <strong>$71M</strong> budget, with a reported salary cost variance of <strong>35.26%</strong>.</p>
+                </article>
+                <article class="hr-kpi-card">
+                  <h3>Employee Attrition</h3>
+                  <p>Overall attrition rate of <strong>14.29%</strong>, comprising <strong>12.84%</strong> involuntary and <strong>3.65%</strong> voluntary attrition.</p>
+                </article>
+                <article class="hr-kpi-card">
+                  <h3>Termination Drivers</h3>
+                  <p>Company restructuring accounted for <strong>65.97%</strong> of recorded terminations.</p>
+                </article>
+                <article class="hr-kpi-card">
+                  <h3>Recruitment &amp; Retention</h3>
+                  <p>The dashboard reports an <strong>86%</strong> retention rate, <strong>56%</strong> recruitment fill rate and average time-to-fill of <strong>48 days</strong>.</p>
+                </article>
+              </div>
+            </section>
+
+            <section id="hr-recommendations">
+              <h2>Recommendations</h2>
+              <ul>
+                <li>Investigate salary expenditure exceeding budget and identify the departments driving the variance.</li>
+                <li>Examine restructuring-related employee exits and their impact on workforce stability.</li>
+                <li>Strengthen retention initiatives by monitoring engagement and attrition patterns.</li>
+                <li>Improve recruitment efficiency by tracking open vacancies, fill rates and time-to-fill.</li>
+              </ul>
+            </section>
+
+            <section id="hr-learning">
+              <h2>What I Learned</h2>
+              <p>Strengthened my experience in HR data analysis, workforce planning metrics, employee attrition analysis, DAX calculations and interactive dashboard development using Power BI and ZoomCharts.</p>
+            </section>
+          </>
+        ) : project.slug === 'x24-music-intelligence' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#x24-overview">Project Overview</a>
+                <a href="#x24-objective">Objective</a>
+                <a href="#x24-contribution">My Contribution</a>
+                <a href="#x24-process">Tools &amp; Process</a>
+                <a href="#x24-insights">Key Insights</a>
+                <a href="#x24-extension">Project Extension</a>
+                <a href="#x24-outcome">Project Outcome</a>
+              </div>
+            </nav>
+
+            <section id="x24-overview">
+              <h2>Project Overview</h2>
+              <p>An independent music intelligence project focused on analysing Davido's <em>5IVE</em> album performance across streaming platforms and international music charts. I independently sourced and organised music performance data to develop an interactive Power BI dashboard examining streaming trends, chart rankings, global reach and album rollout strategy.</p>
+              <figure class="case-image">
+                <img
+                  class:list={project.imageFit === 'contain' ? 'case-image__dashboard' : undefined}
+                  src={withBase(project.image ?? '/images/projects/x24-music-intelligence.webp')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 1200}
+                  height={project.imageHeight ?? 679}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+            </section>
+
+            <section id="x24-objective">
+              <h2>Objective</h2>
+              <p>To evaluate the commercial performance of 5IVE, identify its strongest-performing tracks and platforms, examine its international chart presence and understand how promotional activities aligned with its performance.</p>
+            </section>
+
+            <section id="x24-contribution">
+              <h2>My Contribution</h2>
+              <p>Independently researched and collected music performance information from streaming platforms, official music channels and chart-tracking sources. Structured the collected information into analytical datasets, developed the Power BI dashboard and translated the findings into performance insights.</p>
+            </section>
+
+            <section id="x24-process">
+              <h2>Tools &amp; Process</h2>
+              <ul>
+                <li><strong>Data Research:</strong> Collected Spotify, YouTube, Apple Music, iTunes and Billboard performance information.</li>
+                <li><strong>Data Organisation:</strong> Structured track-level, platform-level, chart-ranking, country and marketing timeline information for analysis.</li>
+                <li><strong>Power BI:</strong> Developed interactive dashboards with KPIs, ranking tables, streaming comparisons, trend visualisations and filters.</li>
+                <li><strong>Business Intelligence:</strong> Examined platform contribution, track performance, international reach and promotional rollout patterns.</li>
+              </ul>
+            </section>
+
+            <section id="x24-insights">
+              <h2>Key Insights</h2>
+              <ul>
+                <li><strong>Streaming Performance:</strong> The dashboard reports approximately 414M Spotify streams and 181M YouTube views.</li>
+                <li><strong>Track Performance:</strong> <em>With You</em> leads the Spotify track ranking with approximately 127M streams.</li>
+                <li><strong>Platform Contribution:</strong> Spotify accounts for approximately 69.96% of the combined streaming and video-view metric displayed in the dashboard.</li>
+                <li><strong>International Reach:</strong> The analysis records chart placements across five countries.</li>
+                <li><strong>Marketing Rollout:</strong> The dashboard examines a 169-day promotional timeline leading to the album's release on 18 April 2025.</li>
+              </ul>
+            </section>
+
+            <section id="x24-extension">
+              <h2>Project Extension</h2>
+              <p>Extended the research to compare 5IVE's established performance with the early rollout of Davido's 2026 album, <em>ORIADÉ</em>. The comparison focuses on streaming momentum, promotional singles and early audience engagement rather than treating an ongoing release as a completed album performance.</p>
+            </section>
+
+            <section id="x24-outcome">
+              <h2>Project Outcome</h2>
+              <p>Developed a multi-page music intelligence dashboard combining independently sourced music data, chart research and interactive visualisation to demonstrate how entertainment industry data can support performance analysis and strategic insights.</p>
+            </section>
+          </>
+        ) : project.slug === 'cafe-sales-analysis' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#cafe-overview">Project Overview</a>
+                <a href="#cafe-objective">Business Objective</a>
+                <a href="#cafe-contribution">My Role &amp; Contribution</a>
+                <a href="#cafe-process">Tools &amp; Analytical Process</a>
+                <a href="#cafe-insights">Key Insights</a>
+                <a href="#cafe-recommendations">Business Recommendations</a>
+                <a href="#cafe-outcome">Project Outcome</a>
+              </div>
+            </nav>
+
+            <section id="cafe-overview">
+              <h2>Project Overview</h2>
+              <p>A real-world cafe sales analytics project undertaken following a request from another analyst seeking support with data analysis. The project involved transforming transactional sales data into meaningful business insights using Python and Power BI.</p>
+              <figure class="case-image">
+                <img
+                  class:list={project.imageFit === 'contain' ? 'case-image__dashboard' : undefined}
+                  src={withBase(project.image ?? '/images/projects/coffee-sales.webp')}
+                  alt={project.imageAlt ?? ''}
+                  width={project.imageWidth ?? 1200}
+                  height={project.imageHeight ?? 663}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption}</figcaption>
+              </figure>
+            </section>
+
+            <section id="cafe-objective">
+              <h2>Business Objective</h2>
+              <p>To evaluate sales performance, identify high-performing products, examine monthly revenue trends and understand how sales channels and payment methods contribute to overall business performance.</p>
+            </section>
+
+            <section id="cafe-contribution">
+              <h2>My Role &amp; Contribution</h2>
+              <p>Engaged to apply my data analytics skills to the cafe sales dataset. I handled data inspection, cleaning and exploratory analysis using Python, followed by the development of an interactive Power BI dashboard to communicate key performance indicators and business insights.</p>
+            </section>
+
+            <section id="cafe-process">
+              <h2>Tools &amp; Analytical Process</h2>
+              <ul>
+                <li><strong>Python &amp; Pandas:</strong> Inspected 10,000 transaction records and assessed data quality.</li>
+                <li><strong>Data Cleaning:</strong> Converted data types, handled missing values, standardised unspecified categories and filtered incomplete records.</li>
+                <li><strong>Feature Engineering:</strong> Extracted year, month number and month name from transaction dates.</li>
+                <li><strong>Jupyter Notebook:</strong> Conducted data preparation and exploratory analysis.</li>
+                <li><strong>Power BI:</strong> Developed interactive visualisations covering revenue, transactions, product performance, monthly trends and sales channels.</li>
+              </ul>
+            </section>
+
+            <section id="cafe-insights">
+              <h2>Key Insights</h2>
+              <ul>
+                <li><strong>Sales Performance:</strong> The dashboard reports approximately ₦88.8K revenue, 10K transactions and 30.1K units sold.</li>
+                <li><strong>Product Performance:</strong> Salad recorded the highest displayed product revenue at approximately ₦17K, followed by Sandwich and Smoothie.</li>
+                <li><strong>Revenue Trends:</strong> July recorded a noticeable revenue spike in the monthly trend.</li>
+                <li><strong>Channel Performance:</strong> The "Not Specified" location category contributed approximately ₦35.3K in revenue, highlighting a data classification improvement opportunity.</li>
+                <li><strong>Monthly Growth:</strong> The dashboard reports 8.8% monthly growth.</li>
+              </ul>
+            </section>
+
+            <section id="cafe-recommendations">
+              <h2>Business Recommendations</h2>
+              <ul>
+                <li>Prioritise high-performing products and monitor changing customer demand.</li>
+                <li>Investigate the July revenue spike to understand its contributing factors.</li>
+                <li>Improve transaction data capture to reduce unspecified sales-channel and location records.</li>
+                <li>Use sales trends to support inventory planning and operational decisions.</li>
+              </ul>
+            </section>
+
+            <section id="cafe-outcome">
+              <h2>Project Outcome</h2>
+              <p>Delivered a structured sales analysis and interactive Power BI dashboard that makes key business performance indicators easier to monitor and explore.</p>
+            </section>
+          </>
+        ) : project.slug === 'supplier-quality-performance' ? (
           <>
             <nav class="case-article__toc" aria-label="Case study sections">
               <span class="case-article__toc-label">On this page</span>
@@ -122,6 +1155,89 @@ const previewTitle = project.slug === 'ruchy-qr-business-card'
             <section id="what-i-learned">
               <h2>What I Learned</h2>
               <p>This project strengthened my practical experience in Power Query transformations, dimensional data modelling, DAX calculations and developing interactive Power BI reports.</p>
+            </section>
+          </>
+        ) : project.slug === 'saas-financial-analysis' ? (
+          <>
+            <nav class="case-article__toc" aria-label="Case study sections">
+              <span class="case-article__toc-label">On this page</span>
+              <div class="case-article__toc-items">
+                <a href="#saas-overview">Project Overview</a>
+                <a href="#saas-objective">Objective</a>
+                <a href="#saas-contribution">My Contribution</a>
+                <a href="#saas-tools-process">Tools &amp; Process</a>
+                <a href="#saas-key-insights">Key Insights</a>
+                <a href="#saas-recommendations">Business Recommendations</a>
+                <a href="#saas-what-i-learned">What I Learned</a>
+              </div>
+            </nav>
+
+            <section id="saas-overview">
+              <h2>Project Overview</h2>
+              <p>A financial performance analysis of a SaaS company covering 2022–2024. The project explores revenue, expenses, profitability, budget performance and financial trends through interactive Power BI dashboards.</p>
+              <figure class="case-image">
+                <img
+                  src={withBase(project.image ?? '/images/projects/saas-financial-analysis.webp')}
+                  alt={project.imageAlt ?? 'SaaS financial performance dashboard'}
+                  width={project.imageWidth ?? 1200}
+                  height={project.imageHeight ?? 648}
+                  fetchpriority="high"
+                />
+                <figcaption>{project.imageCaption ?? 'SaaS Financial Performance Dashboard.'}</figcaption>
+              </figure>
+            </section>
+
+            <section id="saas-objective">
+              <h2>Objective</h2>
+              <p>To evaluate the company's financial performance, identify major revenue and expense drivers, assess actual performance against budget and uncover trends that can support financial planning and business decisions.</p>
+            </section>
+
+            <section id="saas-contribution">
+              <h2>My Contribution</h2>
+              <p>Participated in FP20 Analytics Challenge 25, developing an interactive financial dashboard to analyse three years of company financial data. My work focused on financial performance analysis, budget variance assessment, KPI reporting and data visualisation.</p>
+            </section>
+
+            <section id="saas-tools-process">
+              <h2>Tools &amp; Process</h2>
+              <ul>
+                <li><strong>Data Analysis:</strong> Examined financial transactions, revenue, expenses, budgets and account classifications.</li>
+                <li><strong>Financial Modelling:</strong> Analysed actual versus budget performance, profitability, revenue composition and expense distribution.</li>
+                <li><strong>DAX:</strong> Developed financial measures and calculations for KPIs, variances and year-over-year comparisons.</li>
+                <li><strong>Visualisation:</strong> Built interactive dashboards using Power BI and ZoomCharts, incorporating financial matrices, trend charts, category breakdowns and slicers.</li>
+              </ul>
+            </section>
+
+            <section id="saas-key-insights">
+              <h2>Key Insights</h2>
+              <h3>1. Overall Budget Performance</h3>
+              <p>Across 2022–2024, the analysis reports cumulative spending approximately $511.9K below plan. Annual variance figures highlight differences in budget performance across the three years.</p>
+              <h3>2. Profitability Trends</h3>
+              <ul>
+                <li>2022 recorded a net loss of $385.2K.</li>
+                <li>2023 recorded a net loss of approximately $1.36M.</li>
+                <li>2024 recorded a net profit of approximately $299.9K.</li>
+              </ul>
+              <h3>3. Revenue Performance</h3>
+              <p>SaaS subscriptions generated approximately $14.29M, representing 79.6% of total revenue, while product revenue contributed approximately $3.61M (20.1%). Monthly revenue increased across the three-year period.</p>
+              <h3>4. Expense Drivers</h3>
+              <p>Payroll was identified as a major expense category, with approximately $12.24M recorded. ADP was the largest vendor outflow, at approximately $10.61M, primarily associated with payroll.</p>
+              <h3>5. Seasonality</h3>
+              <p>The analysis identified monthly fluctuations in revenue and expenses, with revenue strengthening during parts of the year and expenses showing notable increases around July and August.</p>
+            </section>
+
+            <section id="saas-recommendations">
+              <h2>Business Recommendations</h2>
+              <ul>
+                <li>Strengthen budget monitoring and investigate significant monthly spending variances.</li>
+                <li>Maintain focus on SaaS revenue growth while monitoring the contribution of product revenue.</li>
+                <li>Review major expense categories, particularly payroll and cost of goods sold.</li>
+                <li>Use historical monthly trends to improve financial forecasting and budget allocation.</li>
+              </ul>
+            </section>
+
+            <section id="saas-what-i-learned">
+              <h2>What I Learned</h2>
+              <p>This challenge strengthened my practical understanding of financial performance analysis, budget variance calculations, profitability reporting, DAX and interactive dashboard development using Power BI and ZoomCharts.</p>
             </section>
           </>
         ) : project.slug === 'gangreen' ? (
@@ -277,7 +1393,7 @@ const previewTitle = project.slug === 'ruchy-qr-business-card'
         <dl>
           <div><dt>Category</dt><dd>{project.category}</dd></div>
           <div><dt>Classification</dt><dd>{project.type}</dd></div>
-          {project.slug !== 'supplier-quality-performance' && <div><dt>My contribution</dt><dd>{project.contribution}</dd></div>}
+          {project.slug !== 'supplier-quality-performance' && project.slug !== 'cafe-sales-analysis' && <div><dt>My contribution</dt><dd>{project.contribution}</dd></div>}
           {project.tools.length > 0 && <div><dt>Tools</dt><dd>{project.tools.join(' / ')}</dd></div>}
           {project.externalUrl && <div><dt>Public project</dt><dd><a href={project.externalUrl} target="_blank" rel="noopener noreferrer">{project.externalLinkLabel} &#8599;</a></dd></div>}
         </dl>

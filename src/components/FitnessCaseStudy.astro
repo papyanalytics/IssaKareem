@@ -1,0 +1,228 @@
+---
+import type { Project } from '../data/projects';
+import { withBase } from '../utils/paths';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<nav class="case-article__toc" aria-label="Case study sections">
+  <span class="case-article__toc-label">On this page</span>
+  <div class="case-article__toc-items">
+    <a href="#fitness-overview">Project Overview</a>
+    <a href="#fitness-context">Business Context &amp; Objectives</a>
+    <a href="#fitness-data">Dataset &amp; Data Structure</a>
+    <a href="#fitness-power-query">Power Query Workflow</a>
+    <a href="#fitness-model">Data Model &amp; DAX</a>
+    <a href="#fitness-architecture">Dashboard Architecture</a>
+    <a href="#fitness-pages">Page-by-Page Walkthrough</a>
+    <a href="#fitness-findings">Analytical Findings</a>
+    <a href="#fitness-recommendations">Recommendations</a>
+    <a href="#fitness-design">Design &amp; Visualisation</a>
+    <a href="#fitness-limitations">Limitations</a>
+    <a href="#fitness-skills">Tools &amp; Skills</a>
+  </div>
+</nav>
+
+<section id="fitness-overview">
+  <h2>1. Project Overview</h2>
+  <p><strong>Fitness Center Membership, Revenue &amp; Retention Analytics</strong> is a multi-page Power BI project created for the Onyx Data Challenge. The report represents MyGym Fitness Center and explores membership revenue, subscription attributes, churn indicators, member engagement, demographics and gym-location performance. It is challenge work, not a commercial deployment for an actual fitness business.</p>
+  <p>The available project evidence is the PBIX report and an Executive Summary screenshot. The supplied project description also names Power Query, Python, Jupyter Notebook and DAX; however, no notebook is present in the inspected project files, and the PBIX layout does not expose complete formulas or the full query script. The page distinguishes those documented tools from technical steps that could not be verified.</p>
+  <div class="fitness-kpi-grid" aria-label="Executive Summary dashboard KPIs">
+    <div class="fitness-kpi"><strong>$68.9K</strong><span>Total Revenue</span></div>
+    <div class="fitness-kpi"><strong>$34.5</strong><span>Average Final Price</span></div>
+    <div class="fitness-kpi"><strong>$33.8K</strong><span>Total Active Revenue</span></div>
+    <div class="fitness-kpi"><strong>$35.1K</strong><span>Loss Revenue card; its model field is Projected Lost Revenue</span></div>
+  </div>
+  <figure class="case-image case-image--gallery fitness-dashboard-image">
+    <img
+      class="case-image__dashboard"
+      src={withBase(project.image ?? '/images/projects/fitness-centre-analytics.webp')}
+      alt={project.imageAlt ?? ''}
+      width={project.imageWidth ?? 1200}
+      height={project.imageHeight ?? 707}
+      fetchpriority="high"
+    />
+    <figcaption>{project.imageCaption}</figcaption>
+  </figure>
+  <p class="case-article__callout">The screenshot is the Executive Summary view only. The PBIX report layout confirms six additional pages, but separate screenshots for those pages were not available among the project assets.</p>
+</section>
+
+<section id="fitness-context">
+  <h2>2. Business Context &amp; Objectives</h2>
+  <p>Fitness businesses commonly monitor member revenue, subscription models, pricing, retention and engagement alongside demographic and location segments. Reviewing those measures together can help frame questions about where revenue is recorded, how memberships differ, and which activity patterns merit further investigation.</p>
+  <p>This challenge dashboard is designed to explore revenue trends and membership contributions; compare subscription models, prices, discounts and churn labels; examine membership acquisition and tenure; review visit and training indicators; and compare displayed measures by gym location, member type and demographic group. It presents descriptive analyses rather than establishing causes or predicting future churn.</p>
+  <p>Discounts, revenue and churn are therefore treated as analytical questions: the report contains visuals relating those fields, but a relationship shown in a dashboard is not proof that one factor caused another or that a displayed “loss” is realized cash.</p>
+</section>
+
+<section id="fitness-data">
+  <h2>3. Dataset &amp; Data Structure</h2>
+  <p>The supplied partial Power Query extract identifies a CSV named <code>cleaned_fitness_data.csv</code>, parsed with 29 columns, comma delimiters, encoding 1252 and <code>QuoteStyle.None</code>. This establishes the file used by that query, not the upstream source or the steps that originally created the cleaned file. The full column inventory, record count, source provenance and data-quality statistics are <strong>Not verified from available project files</strong>.</p>
+  <p>The PBIX report queries reference one entity, <code>cleaned_fitness_data</code>. Visible fields used by report visuals include join date, home gym location, membership type, subscription model and price, final and adjusted price, discount rate/type, tenure days, visit frequency, access hours, time in gym, personal training hours, group lessons, drink subscriptions, sauna use, age, gender, churn risk and location coordinates. This is the set of fields observable in report queries, not a verified complete schema or a field dictionary.</p>
+  <p>There is no fitness Jupyter Notebook or source-data file among the inspected project assets. The supplied project brief names Python and Jupyter Notebook, but their exact workflow and any upstream transformations are not demonstrated by the available files.</p>
+</section>
+
+<section id="fitness-power-query">
+  <h2>4. Power Query Data Preparation</h2>
+  <p>The partial M code supplied for the project shows the CSV import and header promotion, then a later identifier sequence. The omitted steps are not present in the supplied extract, and the PBIX archive did not expose a complete Power Query mashup for inspection.</p>
+  <pre class="case-article__code"><code>{`Source = Csv.Document(
+    File.Contents("...cleaned_fitness_data.csv"),
+    [Delimiter=",", Columns=29, Encoding=1252,
+     QuoteStyle=QuoteStyle.None]
+),
+#"Promoted Headers" = Table.PromoteHeaders(Source)`}</code></pre>
+  <p>The visible identifier transformation constructs a temporary field, changes its type, removes it, renames the existing Index column, then removes duplicate rows:</p>
+  <pre class="case-article__code"><code>{`#"Added Custom1" = Table.AddColumn(
+    #"Renamed Columns",
+    "Members ID",
+    each Text.Start([home_gym_location], 3)
+      & Text.From([join_date], "yyyyMMdd")
+      & Text.From([Index])
+),
+#"Changed Type4" = Table.TransformColumnTypes(
+    #"Added Custom1", {{"Members ID", type text}}
+),
+#"Removed Columns1" = Table.RemoveColumns(
+    #"Changed Type4", {"Members ID"}
+),
+#"Renamed Columns1" = Table.RenameColumns(
+    #"Removed Columns1", {{"Index", "Members ID"}}
+),
+#"Removed Duplicates" = Table.Distinct(#"Renamed Columns1")`}</code></pre>
+  <p>The custom value combines the first three characters of <code>home_gym_location</code>, <code>join_date</code> formatted as <code>yyyyMMdd</code>, and <code>Index</code>. The code then removes that constructed column, renames the existing <code>Index</code> field to <code>Members ID</code>, and applies <code>Table.Distinct</code> to the resulting rows. Therefore, the visible final <code>Members ID</code> is the renamed Index field, not the constructed value.</p>
+  <p>A member identifier is useful for referencing membership-level records, but this sequence does not by itself prove the field is unique, stable across refreshes or a durable business key. The distinct operation is not shown with a subset-of-columns key, so no additional deduplication rules are assumed. The omitted query steps and their data-type, missing-value or formatting treatments remain <strong>Not verified from available project files</strong>.</p>
+</section>
+
+<section id="fitness-model">
+  <h2>5. Data Model &amp; DAX Calculations</h2>
+  <p>The report layout exposes visual queries against <code>cleaned_fitness_data</code> and references named measures, implicit field aggregations and columns. The available archive extraction does not expose the model's DAX definitions or relationship metadata; formulas, cardinality and filter direction are therefore <strong>Not verified from available project files</strong>. The table below reports only what the visuals reference, not reconstructed formulas.</p>
+  <div class="case-article__table-wrap">
+    <table class="case-article__table">
+      <thead><tr><th>Displayed metric</th><th>Visible model reference</th><th>Formula / interpretation status</th></tr></thead>
+      <tbody>
+        <tr><td>Total Revenue</td><td><code>Total Revenue</code> measure reference</td><td>DAX formula not verified.</td></tr>
+        <tr><td>Average Final Price</td><td>Average of <code>final_price</code> on the Executive Summary card</td><td>Visual-level aggregation is visible; no custom DAX formula verified.</td></tr>
+        <tr><td>Total Active Revenue</td><td><code>Total Active Revenue</code> measure reference</td><td>DAX formula not verified; “active” definition not established.</td></tr>
+        <tr><td>Loss Revenue</td><td>Card title “Loss Revenue”; query references <code>Projected Lost Revenue</code></td><td>Formula not verified. The field name does not establish realized cash loss.</td></tr>
+        <tr><td>Churn Rate</td><td><code>Churn Rate</code> measure reference</td><td>DAX formula and churn denominator not verified.</td></tr>
+        <tr><td>Churn Risk Score</td><td><code>Churn Risk Score</code> measure reference</td><td>Formula, thresholds and risk-label logic not verified.</td></tr>
+        <tr><td>Average Subscription</td><td><code>Average Subscription Price</code> measure reference</td><td>Formula and units not verified.</td></tr>
+        <tr><td>Revenue per Day</td><td>Card query references a summed “Revenue per Day” field; <code>Total Revenue per Day</code> is also referenced elsewhere</td><td>Exact field/measure relationship and formula not verified.</td></tr>
+        <tr><td>Average Tenure Days</td><td>Average of <code>tenure_days</code></td><td>Visible aggregation; the underlying tenure definition is not verified.</td></tr>
+        <tr><td>Drink Subscription Rate</td><td><code>Drink Subscription Rate</code> measure reference</td><td>Formula and denominator not verified.</td></tr>
+        <tr><td>Average Discount Rate</td><td>Average of <code>discount_rate</code></td><td>Visible aggregation; the treatment of missing or zero values is not verified.</td></tr>
+        <tr><td>Member Count</td><td>Count of <code>Members ID</code></td><td>Report reference is a count; distinct-member semantics are not verified.</td></tr>
+        <tr><td>Projected Loss</td><td><code>Projected Lost Revenue</code> measure reference</td><td>DAX formula and meaning are not verified.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The report also references trend-icon measures (including month-over-month and year-over-year labels) and <code>Personal Training Adoption Rate</code>. Their formulas are not exposed in the inspected project files, so they are not expanded here.</p>
+</section>
+
+<section id="fitness-architecture">
+  <h2>6. Dashboard Architecture</h2>
+  <p>The PBIX contains seven pages: <strong>Executive Summary</strong>, <strong>Revenue</strong>, <strong>Subscription</strong>, <strong>Membership Analysis</strong>, <strong>Engagement &amp; Usage</strong>, <strong>Geographic Analysis</strong> and <strong>General Analysis</strong>. The report layout includes action buttons on the pages, supporting navigation among the report sections.</p>
+  <p>Report visuals reference slicer fields such as home gym location, join year and month, subscription model, age group and self-identified gender; the General Analysis page also includes a drink-subscription filter. These are the fields visible in the PBIX visual queries, not a claim that every slicer appears on every page.</p>
+  <p>Visuals query <code>cleaned_fitness_data</code>. The number of model tables and the relationships between them cannot be confirmed from the available report-layout metadata.</p>
+</section>
+
+<section id="fitness-pages">
+  <h2>7. Page-by-Page Walkthrough</h2>
+  <div class="fitness-page">
+    <h3>A. Executive Summary</h3>
+    <p>The screenshot shows cards for Total Revenue ($68.9K), Average Final Price ($34.5), Total Active Revenue ($33.8K) and Loss Revenue ($35.1K). Supporting visuals include Total Revenue by Month (New Subscribers), revenue by age group and membership type, a member-segment table by membership and gender, revenue by membership type, and member/revenue contribution by gender and membership type. Join date, subscription, age, gender and home-gym fields are used in slicers.</p>
+    <p>The monthly visual supports comparison of subscriber revenue across calendar months, while the segment charts and table break displayed revenue or member measures down by demographic and membership categories. The screenshot does not establish causes for the monthly variation or verify how the headline measures are calculated.</p>
+  </div>
+  <div class="fitness-page">
+    <h3>B. Revenue</h3>
+    <p>The PBIX page is named Revenue. Its cards reference Average Tenure Days, Revenue per Day, average discount rate and Drink Subscription Rate. It includes a performance breakdown by location and member type; revenue by location and membership type; revenue versus Projected Lost Revenue by gender; revenue contribution by age group and membership type; and discount type comparisons using Total Revenue and Average Final Price.</p>
+    <p>These visuals support segment comparisons across location, member type, gender, age and discount type. The title “Projected Loss” does not prove that the value is actual lost cash.</p>
+  </div>
+  <div class="fitness-page">
+    <h3>C. Subscription</h3>
+    <p>The PBIX page is named Subscription. It shows an Average Subscription card, a Churn Rate card and a Churn Risk Score card. Visuals cover average discount rate by subscription model, location/subscription performance, a membership hierarchy with value and behaviour measures, revenue by subscription model, churn rate by subscription model, and price comparisons by subscription model.</p>
+    <p>The supplied dashboard description reports Average Subscription of 40.1, Churn Rate of 50.6% and a Low Risk score. Both the numeric rate and the label are dashboard-reported; without the model formula and threshold logic, the “Low Risk” classification cannot be validated against the displayed churn rate.</p>
+  </div>
+  <div class="fitness-page">
+    <h3>D. Membership Analysis</h3>
+    <p>This page examines churn rate by age group and membership type, member count, revenue by subscription model, monthly new-member acquisition, engagement versus tenure, gender and membership breakdowns, average personal-training hours by membership type, and subscription-price comparisons. The PBIX uses a ZoomCharts time visual for acquisition, along with ZoomCharts pie/facet visuals and native charts and tables.</p>
+    <p>The page provides views for comparing member composition, acquisition and selected tenure/engagement fields. It does not by itself establish why a member churned or whether a particular engagement level causes retention.</p>
+  </div>
+  <div class="fitness-page">
+    <h3>E. Engagement &amp; Usage</h3>
+    <p>The report layout confirms visuals for average visits per week by membership type and access hours, a chart relating age group to time in the gym, a Python visual titled Personal Trainer Usage Vs Group Lessons, average personal-training hours by gender and membership type, Average Duration in Gym, Peak Usage Time, earliest average check-in, latest average check-out, Average Visit per Week and Personal Training Adoption Rate.</p>
+    <p>This page organizes attendance and usage indicators. The Python visual is verified by its report visual type and title; the notebook code behind it and the exact calculation logic for its inputs are not available.</p>
+  </div>
+  <div class="fitness-page">
+    <h3>F. Geographic Analysis</h3>
+    <p>This page contains a Drink Subscription Rate by Member Segment visual, Sauna Usage &amp; Revenue by Location, a Location &amp; Age Performance Breakdown, a map titled Revenue &amp; Loss by Gym Location, a churn-rate map by home gym location, and a location/membership subscription-price comparison. Its visuals reference home gym location and related revenue, churn, demographic and subscription fields.</p>
+    <p>These views support location-level comparison. No location-specific ranking or performance conclusion is stated here because the available screenshot does not show this page's values and the full report results are not available as a static export.</p>
+  </div>
+  <div class="fitness-page">
+    <h3>G. General Analysis</h3>
+    <p>The final page combines Drink Subscription Rate by Membership Type and Gender, a Sauna Usage &amp; Revenue table, revenue/final-price analysis by discount type, a Personal Training Adoption &amp; Revenue table, and Personal Training Performance by Location. The report layout also shows filters for location, join year/month, subscription model, age, drink subscription and gender.</p>
+    <p>This page gathers additional membership and activity cuts for exploration. It does not establish an intervention outcome or explain causal drivers.</p>
+  </div>
+  <p class="case-article__callout">Only the Executive Summary screenshot is available in the project image assets. The remaining page descriptions above are based on PBIX page names, visual titles and visual field references; they are not presented as additional screenshots.</p>
+</section>
+
+<section id="fitness-findings">
+  <h2>8. Analytical Findings</h2>
+  <ul>
+    <li><strong>Executive Summary:</strong> The available screenshot displays $68.9K Total Revenue, $34.5 Average Final Price, $33.8K Total Active Revenue and $35.1K on the Loss Revenue card. The PBIX visual maps that last card to a field named Projected Lost Revenue; its meaning is not verified.</li>
+    <li><strong>Subscription:</strong> The supplied project description reports 50.6% Churn Rate and a Low Risk Churn Risk Score. Because the formula and label thresholds are unavailable, this is a pair of displayed outputs, not a validated risk conclusion.</li>
+    <li><strong>Revenue and membership:</strong> The PBIX includes comparisons by subscription model, age group, membership type, gender, location and discount type. The available evidence establishes the analysis dimensions but does not support a ranking of strongest segments.</li>
+    <li><strong>Engagement and geography:</strong> The report contains attendance, gym-duration, training and location visuals. No quantified location or engagement findings are verified from the single available screenshot.</li>
+  </ul>
+</section>
+
+<section id="fitness-recommendations">
+  <h2>9. Business Recommendations</h2>
+  <p>The report can frame further analysis, but the following are areas for validation rather than conclusions proven by this challenge dashboard:</p>
+  <ul>
+    <li>Confirm the churn-rate denominator and the thresholds used for the Low Risk label before using it for retention prioritisation.</li>
+    <li>Review subscription pricing and discount comparisons alongside membership volumes and the underlying measure definitions.</li>
+    <li>Investigate location and membership-type differences using comparable filter context before prioritising a gym or segment.</li>
+    <li>Examine attendance, training and tenure patterns with member-level definitions and adequate time context before changing engagement programmes.</li>
+    <li>Clarify how Projected Lost Revenue is calculated before describing it as a financial loss or using it in a revenue-recovery target.</li>
+  </ul>
+</section>
+
+<section id="fitness-design">
+  <h2>10. Design &amp; Visualisation Approach</h2>
+  <p>The supplied Executive Summary screenshot uses a dark navy left navigation rail against a light neutral report canvas, with branded header, action-button navigation, prominent KPI cards and a grid of charts and a detailed table. This gives the headline indicators visual priority while leaving room for month, membership, age and gender comparisons.</p>
+  <p>The PBIX package contains ZoomCharts custom visual types including Facet Chart, Pie Chart, Time Chart, Drill Down Pie, Drill Down Combo Bar and Advanced Waterfall. The report also uses native cards, tables, slicers, maps, line/area, bar, donut, scatter and Python visuals. ZoomCharts is therefore part of the visual toolkit, not a claim that every chart is a ZoomCharts visual.</p>
+  <p>Report action buttons and slicer fields support interactive navigation and filtering in Power BI. This portfolio page documents the report structure; it does not recreate Power BI interactivity in the website.</p>
+</section>
+
+<section id="fitness-limitations">
+  <h2>11. Limitations &amp; Analytical Considerations</h2>
+  <ul>
+    <li>The available dashboard screenshot shows only the Executive Summary; other page details are taken from the PBIX layout, not separate screenshots.</li>
+    <li>The DAX formulas for named measures, their definitions and assumptions are not available in the inspected files. Churn, risk-score and projected-loss interpretations require formula verification.</li>
+    <li>The PBIX report layout references <code>cleaned_fitness_data</code>, but model relationships, cardinality, filter direction and the complete table structure are not verified.</li>
+    <li>The supplied M extract is partial. Its visible identifier logic shows a constructed value removed before <code>Index</code> is renamed to <code>Members ID</code>; uniqueness and refresh stability are not established.</li>
+    <li>The supplied code calls <code>Table.Distinct</code>, but the available extract does not show the full query context or a duplicate investigation report.</li>
+    <li>The exact dataset provenance, record count, missing-value handling and other cleaning statistics are not verified. No fitness Jupyter Notebook was available to inspect.</li>
+    <li>Revenue differences should be considered alongside membership volume and filter context. The visuals alone do not prove causation or operational impact.</li>
+    <li>The dashboard does not demonstrate a validated predictive churn model. No prediction accuracy or intervention outcome is established.</li>
+    <li>Displayed KPI labels do not establish financial semantics: “Loss Revenue” is linked to a field named Projected Lost Revenue, and neither implies realized cash loss without a verified formula.</li>
+  </ul>
+</section>
+
+<section id="fitness-skills">
+  <h2>12. Tools, Skills &amp; Project Conclusion</h2>
+  <p>The supplied project description identifies Power BI, Power Query, Python, Jupyter Notebook, DAX and ZoomCharts. The PBIX provides direct evidence for the multi-page Power BI report, its visual query structure, navigation buttons, slicers and packaged custom visuals. A Python visual is also present on Engagement &amp; Usage.</p>
+  <ul>
+    <li>Power BI report development and multi-page information architecture.</li>
+    <li>Power Query CSV import and member-identifier transformation, as shown in the supplied partial M code.</li>
+    <li>Report-level measure and field inspection, with care to distinguish DAX measures from implicit aggregations.</li>
+    <li>Membership, revenue, subscription, churn, engagement and geographic analysis dimensions.</li>
+    <li>Interactive report design using native Power BI and verified ZoomCharts visual types.</li>
+    <li>Evidence-based communication of findings, calculation uncertainty and data-model limitations.</li>
+  </ul>
+  <p>This Onyx Data Challenge project brings member, revenue and usage questions into a navigable report. Its technical documentation records what the PBIX and supplied M extract demonstrate and clearly marks DAX formulas, relationships, upstream cleaning steps and notebook implementation that still require verification.</p>
+</section>
