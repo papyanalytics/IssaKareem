@@ -2,159 +2,110 @@
 
 **Onyx Data Challenge | MyGym Fitness Center | Power BI | Power Query | Python | Jupyter Notebook | DAX | ZoomCharts**
 
-## 1. Project overview
+## Project overview
 
-A multi-page Power BI challenge project representing MyGym Fitness Center. The report explores membership revenue, subscription attributes, churn indicators, member engagement, demographics and gym-location performance. This is challenge work, not a commercial deployment for an actual fitness business.
+This challenge project uses a multi-page Power BI dashboard to explore how membership, subscriptions, revenue, retention indicators and gym usage can be understood together. It represents MyGym Fitness Center and is an analytical project, not a commercial deployment for a real fitness business.
 
-The supplied project brief identifies Power BI, Power Query, Python, Jupyter Notebook, DAX and ZoomCharts. The available assets include the PBIX and one Executive Summary screenshot. No fitness notebook or source-data file was found. The report layout exposes visual titles and field references, but the inspected archive did not expose complete DAX formulas, model relationships or a complete Power Query mashup. This documentation marks those details as not verified rather than reconstructing them.
+The goal was to bring common fitness-business questions into one report: where revenue comes from, how subscription and membership groups compare, what the available churn indicators show, how members use the gym, and how results differ by location.
 
-## 2. Business context and objectives
+## Data Preparation
 
-Fitness businesses commonly monitor member revenue, subscription models, pricing, retention and engagement alongside demographic and location segments. The dashboard is designed to explore revenue trends and membership contributions; compare subscription models, prices, discounts and churn labels; examine acquisition and tenure; review visit and training indicators; and compare displayed measures by gym location, member type and demographic group.
+Before building the dashboard, I prepared the fitness centre dataset to make it suitable for analysis in Power BI. The preparation process involved working with the CSV dataset, organising the columns, assigning appropriate data types and preparing the member records for reporting.
 
-The report is descriptive. It does not establish causes for churn, predict future retention or prove that a dashboard pattern produced a business outcome. Revenue, discounts and churn comparisons need to be interpreted in the applicable filter context.
+### 1. Importing the data
 
-## 3. Dataset and data structure
+I imported the prepared fitness dataset, `cleaned_fitness_data.csv`, into Power BI using Power Query. The dataset contained information about members, membership types, gym locations, visits, subscriptions and other fitness-related activities.
 
-The supplied partial Power Query code names `cleaned_fitness_data.csv` as its input and configures a 29-column comma-delimited CSV with encoding 1252 and `QuoteStyle.None`. This does not establish the upstream source or how the cleaned file was created. Record count, complete column inventory, source provenance and data-quality statistics are **Not verified from available project files**.
+### 2. Organising the dataset
 
-The PBIX report queries reference one entity, `cleaned_fitness_data`. Visuals use fields including join date, home gym location, membership type, subscription model and price, final and adjusted price, discount rate/type, tenure days, visit frequency, access hours, time in gym, personal training hours, group lessons, drink subscriptions, sauna use, age, gender, churn risk and location coordinates. These are fields visible in report queries, not a complete schema or verified field dictionary.
+I promoted the first row to become the column headers, making the fields easier to identify and work with. I also assigned appropriate data types to the columns. For example, age and visit frequency were treated as numerical values, membership information as text, and attendance-related fields according to their data types.
 
-No Jupyter Notebook or source-data file was present among the inspected project assets. The project description names Python and Jupyter Notebook, but their exact workflow is not demonstrated in the available files.
+This helped ensure that the information could be used appropriately in calculations, comparisons and dashboard visuals.
 
-## 4. Power Query workflow
+### 3. Preparing membership records
 
-The following is a partial M extract supplied with the project. Its input and header-promotion steps are:
+I worked on the member identification field to provide each record with an identifier for reporting purposes. The Power Query process included creating a temporary identifier using the gym location, joining date and row index. This temporary column was subsequently removed, and the existing index column was renamed to `Members ID`.
 
-```powerquery
-Source = Csv.Document(
-    File.Contents("...cleaned_fitness_data.csv"),
-    [Delimiter=",", Columns=29, Encoding=1252, QuoteStyle=QuoteStyle.None]
-),
-#"Promoted Headers" = Table.PromoteHeaders(Source)
-```
+### 4. Removing duplicate records
 
-The visible later sequence constructs a temporary identifier, converts it to text, removes it, renames the existing Index column to `Members ID`, and removes duplicate rows:
+I applied Power Query's duplicate-removal operation to the prepared dataset. This helped prevent identical records from appearing more than once in the final dataset. The exact number of duplicate records removed was not documented.
 
-```powerquery
-#"Added Custom1" = Table.AddColumn(
-    #"Renamed Columns",
-    "Members ID",
-    each Text.Start([home_gym_location], 3)
-        & Text.From([join_date], "yyyyMMdd")
-        & Text.From([Index])
-),
-#"Changed Type4" = Table.TransformColumnTypes(
-    #"Added Custom1", {{"Members ID", type text}}
-),
-#"Removed Columns1" = Table.RemoveColumns(
-    #"Changed Type4", {"Members ID"}
-),
-#"Renamed Columns1" = Table.RenameColumns(
-    #"Removed Columns1", {{"Index", "Members ID"}}
-),
-#"Removed Duplicates" = Table.Distinct(#"Renamed Columns1")
-```
+### 5. Preparing the data for analysis
 
-The custom value combines the first three characters of `home_gym_location`, `join_date` formatted as `yyyyMMdd`, and `Index`. The constructed column is then removed. The final visible `Members ID` is the renamed Index column, not that custom value. This sequence does not prove that the final field is unique, stable across refreshes or a durable business key. `Table.Distinct` is not shown with a subset-of-columns key, so no additional deduplication semantics are claimed.
+After preparation, the dataset was ready to support the dashboard analysis. The fields were organised to help explore membership performance, revenue, subscription patterns, member engagement, retention and differences across gym locations.
 
-The supplied extract notes that additional transformations exist, but those steps were omitted. The PBIX package did not expose a complete query for inspection; omitted type, null, duplicate or formatting steps are **Not verified from available project files**.
+The prepared data was then used to develop the Power BI report, with DAX measures and visualisations supporting the different areas of analysis.
 
-## 5. Data model and DAX
+### Outcome
 
-The report layout exposes visual queries against `cleaned_fitness_data`, with references to both named measures and implicit field aggregations. The available report metadata does not expose the DAX expressions, model relationships, cardinality or filter direction. These details are **Not verified from available project files**.
+The preparation process provided a more organised dataset for analysis and reporting. It established a foundation for examining how membership activity, revenue and customer behaviour relate to the overall performance of the fitness centre.
 
-| Displayed metric | Visible report reference | Formula status |
-|---|---|---|
-| Total Revenue | `Total Revenue` measure reference | DAX formula not verified. |
-| Average Final Price | Average of `final_price` on the Executive Summary card | The visual-level aggregation is visible; no custom DAX formula verified. |
-| Total Active Revenue | `Total Active Revenue` measure reference | Formula and “active” definition not verified. |
-| Loss Revenue | Card title maps to `Projected Lost Revenue` | Formula not verified; this does not establish realized cash loss. |
-| Churn Rate | `Churn Rate` measure reference | Formula and denominator not verified. |
-| Churn Risk Score | `Churn Risk Score` measure reference | Formula, thresholds and label logic not verified. |
-| Average Subscription | `Average Subscription Price` measure reference | Formula and units not verified. |
-| Revenue per Day | Card query uses a summed `Revenue per Day` field; `Total Revenue per Day` is referenced elsewhere | Exact field/measure relationship and formula not verified. |
-| Average Tenure Days | Average of `tenure_days` | Visible aggregation; tenure definition not verified. |
-| Drink Subscription Rate | `Drink Subscription Rate` measure reference | Formula and denominator not verified. |
-| Average Discount Rate | Average of `discount_rate` | Visible aggregation; missing/zero-value handling not verified. |
-| Member Count | Count of `Members ID` | Count is visible; distinct-member semantics are not verified. |
-| Projected Loss | `Projected Lost Revenue` measure reference | Formula and interpretation not verified. |
+## Business questions
 
-The report also references trend-icon measures and `Personal Training Adoption Rate`; their formulas are not exposed in the inspected project files.
+The analysis is designed to help explore:
 
-## 6. Dashboard architecture
+- How is reported revenue distributed across membership types and member groups?
+- How do subscription models, prices and discounts compare?
+- What churn and churn-risk indicators does the report display?
+- How do visit patterns, time in the gym and training activity vary?
+- How do revenue, subscriptions and usage differ across gym locations?
 
-The PBIX contains seven pages: **Executive Summary**, **Revenue**, **Subscription**, **Membership Analysis**, **Engagement & Usage**, **Geographic Analysis** and **General Analysis**. Action buttons appear in the report layout to support page navigation. Slicer references include home gym location, join year/month, subscription model, age group and self-identified gender; General Analysis also references a drink-subscription filter. These fields do not necessarily appear on every page.
+## Dashboard pages
 
-## 7. Page-by-page walkthrough
+The report has seven sections.
 
 ### Executive Summary
 
-The available screenshot displays Total Revenue of approximately **$68.9K**, Average Final Price of **$34.5**, Total Active Revenue of approximately **$33.8K**, and a Loss Revenue card of approximately **$35.1K**. The report query maps the last card to `Projected Lost Revenue`; its calculation and meaning are not verified.
-
-Other visuals include Total Revenue by Month (New Subscribers), revenue by age group and membership type, a member-segment table by membership and gender, revenue by membership type, and member/revenue contribution by gender and membership type. These support month and segment comparisons but do not establish causes.
+Brings headline revenue and pricing indicators together with monthly revenue from new subscribers and breakdowns by age, membership type and gender. It helps decision-makers get an initial view of performance and see which member groups to explore further.
 
 ### Revenue
 
-The page contains cards for Average Tenure Days, Revenue per Day, average discount rate and Drink Subscription Rate. It also includes location/member-type performance, revenue by location and membership type, revenue versus Projected Lost Revenue by gender, age/membership revenue contribution, and discount-type comparisons using Total Revenue and Average Final Price.
+Includes tenure, revenue-per-day, discount and drink-subscription indicators, alongside revenue comparisons by location, membership type, age, gender and discount type. These views can help teams identify patterns and questions to investigate before adjusting offers or prioritising segments.
 
 ### Subscription
 
-Visuals compare average discount rate, subscription price, revenue and churn by subscription model, and include location/subscription performance and a membership hierarchy with value and behaviour measures. The supplied dashboard description reports Average Subscription **40.1**, Churn Rate **50.6%** and a Churn Risk Score of **Low Risk**. The churn and risk formulas and thresholds are unavailable, so the consistency and meaning of the label cannot be validated.
+Compares subscription price, revenue, discounts and displayed churn measures across subscription models and locations. This can inform a closer review of plan differences and retention, while the underlying measure definitions should be confirmed before decisions are made.
 
 ### Membership Analysis
 
-This page includes churn rate by age group and membership type, member count, revenue by subscription model, monthly new-member acquisition, engagement versus tenure, gender/membership breakdowns, average personal-training hours by membership type and subscription-price comparisons. A ZoomCharts time visual is used for member acquisition, with additional ZoomCharts and native visuals.
+Looks at member counts, monthly new-member acquisition, membership mix, churn by age and membership type, tenure and selected engagement indicators such as personal-training hours. It helps teams understand how the member base is changing and where follow-up retention analysis may be useful.
 
 ### Engagement & Usage
 
-The PBIX contains visuals for average visits per week by membership type and access hours, age group versus time in the gym, a Python visual titled **Personal Trainer Usage Vs Group Lessons**, average personal-training hours by gender and membership type, Average Duration in Gym, Peak Usage Time, earliest average check-in, latest average check-out, Average Visit per Week and Personal Training Adoption Rate. The report-layout title confirms a Python visual; its notebook code and calculation details are unavailable.
+Brings together visits per week, gym duration and peak usage indicators, check-in and check-out times, and personal-training and group-lesson activity. This can help a fitness business understand how members use its services and where engagement or resource-planning questions merit further study.
 
 ### Geographic Analysis
 
-The page includes Drink Subscription Rate by Member Segment, Sauna Usage & Revenue by Location, Location & Age Performance Breakdown, a **Revenue & Loss by Gym Location** map, a churn-rate map by home gym location, and a location/membership subscription-price comparison. It supports location comparisons, but no location ranking is verified from the single available screenshot.
+Uses location comparisons and maps for revenue, projected loss and churn, alongside subscription, age, sauna and drink-subscription views. It gives operators a way to explore differences between gyms; no location ranking is claimed here.
 
 ### General Analysis
 
-This page includes Drink Subscription Rate by Membership Type and Gender, a Sauna Usage & Revenue table, revenue/final-price analysis by discount type, a Personal Training Adoption & Revenue table, and Personal Training Performance by Location. The report layout also shows location, join date, subscription, age, drink subscription and gender filter references.
+Combines comparisons of drink subscriptions, sauna use, discounts and personal-training adoption and performance, with filters for member and location attributes. It supports flexible exploration of questions that span several parts of the business.
 
-Only the Executive Summary screenshot was available among the project image assets. The other page descriptions are based on PBIX page names, visual titles and query field references, not fabricated screenshots.
+### 5. What the Dashboard Reveals
 
-## 8. Analytical findings
+The dashboard provides an overview of the fitness centre's revenue performance, membership activity and potential retention challenges.
 
-- The Executive Summary screenshot displays $68.9K Total Revenue, $34.5 Average Final Price, $33.8K Total Active Revenue and $35.1K on the Loss Revenue card. The last field is named Projected Lost Revenue in the report query.
-- The supplied dashboard description reports a 50.6% Churn Rate alongside a Low Risk score. Without the formula and label thresholds, these are displayed outputs, not a validated risk conclusion.
-- The report includes revenue and member comparisons by subscription model, age group, membership type, gender, location and discount type. The available evidence establishes these analysis dimensions but does not support a ranking of strongest segments.
-- Attendance, gym-duration, training and location visuals are present, but no quantified engagement or location finding is verified by the available screenshot.
+- **Revenue Performance:** Total revenue of $68.9K shows the overall revenue represented in the analysis, while the $34.50 average final price gives management a reference for the price members pay. Total active revenue of $33.8K highlights revenue associated with active memberships. The $35.1K in projected lost revenue points to potential revenue exposure, helping management consider the value of maintaining active memberships alongside current revenue.
+- **Membership and Subscriptions:** An average subscription value of 40.1 provides context for interpreting subscription performance alongside membership revenue. It helps management understand the subscription component of the revenue picture and consider whether current offerings meet members' needs.
+- **Member Retention:** The reported 50.6% churn rate and Low Risk churn-risk classification are indicators that make retention worth investigating and monitoring. They can prompt management to keep reviewing member activity and retention, while considering both measures together.
+- **Revenue and Membership Patterns:** Comparing membership types, subscription models, age groups, gender, discounts and gym locations helps management understand how revenue and membership activity vary across customer segments. These comparisons can guide further questions about member needs and business performance without assuming that any specific group or location performs best.
+- **Business Implication:** The revenue, subscription and retention views can inform decisions about membership pricing, subscription offerings, customer engagement and retention strategies. Management can use these findings to identify areas for closer analysis and evaluate potential actions against the centre's goals.
 
-## 9. Business recommendations
+#### Executive Takeaway
 
-These are follow-up investigation areas, not outcomes demonstrated by the challenge dashboard:
+The dashboard brings revenue and membership activity into one view, helping management identify where to investigate and make more informed decisions about pricing, subscriptions and member retention.
 
-- Confirm the churn-rate denominator and Low Risk thresholds before using the score to prioritise retention work.
-- Review subscription pricing and discount comparisons alongside membership volumes and verified measure definitions.
-- Compare locations and member types under comparable filter contexts before prioritising a site or segment.
-- Validate attendance, training and tenure definitions before changing engagement programmes.
-- Confirm the Projected Lost Revenue calculation before describing it as actual financial loss.
+## Practical recommendations
 
-## 10. Design and visualisation
+The dashboard suggests areas for follow-up analysis, not proven business outcomes:
 
-The Executive Summary screenshot shows a dark navy navigation rail, light neutral canvas, branded header, action-button navigation, KPI cards, charts and a detailed table. The PBIX packages ZoomCharts Facet Chart, Pie Chart, Time Chart, Drill Down Pie, Drill Down Combo Bar and Advanced Waterfall visual types. Native cards, tables, slicers, maps, line/area, bar, donut, scatter and Python visuals are also present; not every report visual is a ZoomCharts visual.
+- **Revenue improvement:** Review revenue alongside member volumes and membership mix to identify segments or offers for closer investigation.
+- **Membership retention:** Validate the churn-rate definition and the “Low Risk” thresholds, then use clearly defined member-level measures to guide retention discussions.
+- **Subscription pricing:** Compare subscription prices and discounts with membership uptake and revenue before testing changes to plans or offers.
+- **Member engagement:** Examine visits, gym time and training indicators by membership type to identify services that may merit further engagement initiatives.
+- **Gym location performance:** Compare locations using consistent measures and time periods before deciding where to direct operational attention.
 
-## 11. Limitations
+## Conclusion
 
-- Only the Executive Summary screenshot is available; other page summaries are based on the PBIX layout.
-- DAX formulas and measure definitions are unavailable. Churn, risk-score and projected-loss interpretations require formula verification.
-- Relationships, cardinality, filter direction and the complete table structure are not verified.
-- The visible member-identifier code removes the constructed ID and renames Index. Uniqueness and refresh stability are not established.
-- The partial query does not establish a formal duplicate investigation or all data-quality steps.
-- Dataset provenance, row count, missing-value handling and other cleaning statistics are not verified. No fitness notebook was available.
-- Revenue comparisons should be read with membership volume and filter context; dashboard associations do not demonstrate causation.
-- No validated predictive churn model, prediction accuracy or intervention outcome is established.
-- “Loss Revenue” is associated with `Projected Lost Revenue`; neither name proves realized cash loss without a verified formula.
-
-## 12. Skills and conclusion
-
-The project demonstrates multi-page Power BI report design; inspection of report-level measure and field references; Power Query CSV import and identifier logic as shown in the partial M extract; analysis dimensions for membership, revenue, subscription, churn, engagement and geography; interactive navigation and filtering; and evidence-based communication of technical uncertainty. The supplied project description also identifies Python, Jupyter Notebook and DAX, but their specific implementation is not verified from the available assets.
-
-The challenge report brings membership, revenue and usage questions into a navigable interface. This case study documents what the PBIX and supplied M extract show, while clearly identifying formulas, relationships, upstream cleaning steps and notebook implementation that require further source evidence.
+This project organizes membership, revenue, subscription, retention and usage questions into an interactive report. Its value is in helping a fitness business explore its data from several perspectives and identify sensible next questions—while treating displayed measures as starting points for investigation rather than proof of business outcomes.
